@@ -1,6 +1,6 @@
 const Model = Sequelize.Model;
-class User extends Model {}
-User.init({
+class Usuario extends Model { }
+Usuario.init({
   // attributes
   firstName: {
     type: Sequelize.STRING,
@@ -12,6 +12,6 @@ User.init({
   }
 }, {
   sequelize,
-  modelName: 'user'
+  modelName: 'usuario'
   // options
 });
