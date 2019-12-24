@@ -12,13 +12,8 @@ Usuario.init({
   email: {
     type: Sequelize.STRING,
     allowNull: false
-  },
-  perfil: {
-    type: Sequelize.STRING,
-    allowNull: false
-  },
+  }
 }, {
   sequelize,
   modelName: 'usuario'
-  // options
 });

@@ -7,15 +7,15 @@ router.get('/', (req, res) => {
 });
 
 router.put('/', (req, res) => {
-    usuarioController.updateMateria(req, res);
+    usuarioController.updateUsuario(req, res);
 })
 
 router.post('/', (req, res) => {
-    usuarioController.addMateria(req, res);
+    usuarioController.saveUsuario(req, res);
 });
 
 router.delete('/', (req, res) => {
-    usuarioController.deleteMateria(req, res);
+    usuarioController.deleteUsuario(req, res);
 });
 
 export default router;

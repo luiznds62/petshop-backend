@@ -1,10 +1,15 @@
+// Dependências
 import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
 import logger from './core/logger/app-logger'
 import morgan from 'morgan'
-import materias from './controllers/UsuarioController'
+
+// Configurações
 import connectToDb from './db/connect'
+
+// Controllers
+import usuario from './controllers/UsuarioController'
 
 let port = process.env.PORT || 3000;
 logger.stream = {
@@ -13,15 +18,15 @@ logger.stream = {
     }
 };
 
-connectToDb();
-
 let app = express();
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan("dev", { "stream": logger.stream }));
+connectToDb();
 
-app.use('/usuario', materias);
+// Rotas
+app.use('/usuario', usuario);
 
 app.get('/', (req, res) => {
     res.send("Endpoint inválido");
