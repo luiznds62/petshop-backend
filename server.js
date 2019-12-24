@@ -2,28 +2,27 @@
 import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
-import logger from './core/logger/app-logger'
-import morgan from 'morgan'
 
 // Configurações
-import connectToDb from './db/connect'
+import db from './database/db'
 
 // Controllers
-import usuario from './controllers/UsuarioController'
+import usuario from './src/controllers/UsuarioController'
 
 let port = process.env.PORT || 3000;
-logger.stream = {
-    write: function(message, encoding){
-        logger.info(message);
-    }
-};
-
 let app = express();
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(morgan("dev", { "stream": logger.stream }));
-connectToDb();
+
+db.authenticate().then(() => {
+    console.log("DB Conectado")
+}).catch(err => {
+    console.log("Erro ao conectar no banco: " + err)
+})
+
+// Cria ou atualiza dados do Banco
+db.sync()
 
 // Rotas
 app.use('/usuario', usuario);
@@ -33,5 +32,5 @@ app.get('/', (req, res) => {
 });
 
 app.listen(port, () => {
-    logger.info("Servidor rodando na porta - ", port);
+    console.log("Servidor rodando na porta - ", port);
 });

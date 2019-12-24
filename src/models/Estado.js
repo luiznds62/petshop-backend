@@ -1,5 +1,7 @@
-const Model = Sequelize.Model;
-class Estado extends Model { }
+import Sequelize from 'sequelize'
+import db from '../../database/db'
+
+class Estado extends Sequelize.Model { }
 Estado.init({
     nome: {
         type: Sequelize.STRING,
@@ -10,6 +12,6 @@ Estado.init({
         allowNull: false
     }
 }, {
-    sequelize,
+    sequelize: db,
     modelName: 'estado'
 });

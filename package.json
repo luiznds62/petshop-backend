@@ -6,7 +6,7 @@
     "start": "npm run-script start_babel",
     "build": "babel . -d dist --presets es2015,stage-2 --ignore spec.js,node_modules",
     "serve": "node dist/server.js",
-    "start_babel": "babel-node ./server.js --preset=babel-preset-es2015",
+    "start_babel": "babel-node ./server.js --preset=babel-preset-es6",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint ."
   },
@@ -49,7 +49,7 @@
     "eslint-config-airbnb": "^12.0.0",
     "eslint-plugin-import": "^2.0.1",
     "eslint-plugin-react": "^6.4.1",
-    "nodemon": "^1.9.1"
+    "nodemon": "^1.19.4"
   },
   "eslintConfig": {
     "parser": "babel-eslint",

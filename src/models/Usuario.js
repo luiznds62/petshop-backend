@@ -1,5 +1,8 @@
-const Model = Sequelize.Model;
-class Usuario extends Model { }
+
+import Sequelize from 'sequelize'
+import db from '../../database/db'
+
+class Usuario extends Sequelize.Model { }
 Usuario.init({
   login: {
     type: Sequelize.STRING,
@@ -14,6 +17,8 @@ Usuario.init({
     allowNull: false
   }
 }, {
-  sequelize,
+  sequelize: db,
   modelName: 'usuario'
 });
+
+export default Usuario

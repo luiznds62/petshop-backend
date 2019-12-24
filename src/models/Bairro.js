@@ -1,5 +1,7 @@
-const Model = Sequelize.Model;
-class Bairro extends Model { }
+import Sequelize from 'sequelize'
+import db from '../../database/db'
+
+class Bairro extends Sequelize.Model { }
 Bairro.init({
     id: {
         type: Sequelize.UUID,
@@ -11,6 +13,6 @@ Bairro.init({
         allowNull: false
     }
 }, {
-    sequelize,
+    sequelize: db,
     modelName: 'bairro'
 });

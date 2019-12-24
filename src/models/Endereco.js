@@ -1,5 +1,7 @@
-const Model = Sequelize.Model;
-class Endereco extends Model { }
+import Sequelize from 'sequelize'
+import db from '../../database/db'
+
+class Endereco extends Sequelize.Model { }
 Endereco.init({
     rua: {
         type: Sequelize.STRING,
@@ -30,6 +32,6 @@ Endereco.init({
         allowNull: false
     },
 }, {
-    sequelize,
+    sequelize: db,
     modelName: 'endereco'
 });

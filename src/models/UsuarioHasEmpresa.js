@@ -1,5 +1,7 @@
-const Model = Sequelize.Model;
-class UsuarioHasEmpresa extends Model { }
+import Sequelize from 'sequelize'
+import db from '../../database/db'
+
+class UsuarioHasEmpresa extends Sequelize.Model { }
 UsuarioHasEmpresa.init({
     usuario: {
         type: Sequelize.BIGINT,
@@ -23,6 +25,6 @@ UsuarioHasEmpresa.init({
         allowNull: false
     },
 }, {
-    sequelize,
+    sequelize: db,
     modelName: 'usuariohasempresa'
 });
