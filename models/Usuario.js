@@ -1,15 +1,22 @@
 const Model = Sequelize.Model;
 class Usuario extends Model { }
 Usuario.init({
-  // attributes
-  firstName: {
+  login: {
     type: Sequelize.STRING,
     allowNull: false
   },
-  lastName: {
-    type: Sequelize.STRING
-    // allowNull defaults to true
-  }
+  senha: {
+    type: Sequelize.STRING,
+    allowNull: false
+  },
+  email: {
+    type: Sequelize.STRING,
+    allowNull: false
+  },
+  perfil: {
+    type: Sequelize.STRING,
+    allowNull: false
+  },
 }, {
   sequelize,
   modelName: 'usuario'

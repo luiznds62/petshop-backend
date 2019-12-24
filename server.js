@@ -3,8 +3,7 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import logger from './core/logger/app-logger'
 import morgan from 'morgan'
-import config from './core/config/config.dev'
-import materias from './controllers/materia.route'
+import materias from './controllers/UsuarioController'
 import connectToDb from './db/connect'
 
 let port = process.env.PORT || 3000;
@@ -22,7 +21,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan("dev", { "stream": logger.stream }));
 
-app.use('/materia', materias);
+app.use('/usuario', materias);
 
 app.get('/', (req, res) => {
     res.send("Endpoint inválido");
