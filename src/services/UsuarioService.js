@@ -7,7 +7,7 @@ function validate(usuario) {
     // TODO
 }
 
-service.getAll = async (req, res) => {
+service.buscarTodos = async (req, res) => {
     try {
         let usuarios = await Usuario.findAll()
         return new ResponseBuilder(true, "Enviando usuários", usuarios)
@@ -17,7 +17,7 @@ service.getAll = async (req, res) => {
     }
 }
 
-service.saveUsuario = async (req, res) => {
+service.salvarUsuario = async (req, res) => {
     validate(req.body)
     try {
         let usuarioNovo = await Usuario.create(req.body)
