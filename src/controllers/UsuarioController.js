@@ -14,6 +14,10 @@ router.post('/', async (req, res) => {
     res.send(await usuarioService.salvarUsuario(req, res))
 })
 
+router.post('/autenticar', async (req, res) => {
+    res.send(await usuarioService.autenticar(req, res))
+})
+
 router.delete('/', async (req, res) => {
     res.send(await usuarioService.deletarUsuario(req, res))
 })

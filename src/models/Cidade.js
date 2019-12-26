@@ -1,4 +1,5 @@
 import Sequelize from 'sequelize'
+import Estado from '../models/Estado'
 import db from '../../database/db'
 
 class Cidade extends Sequelize.Model { }
@@ -19,3 +20,5 @@ Cidade.init({
     sequelize: db,
     modelName: 'cidade'
 });
+
+export default Cidade

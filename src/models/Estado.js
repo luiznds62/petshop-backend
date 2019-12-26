@@ -15,3 +15,5 @@ Estado.init({
     sequelize: db,
     modelName: 'estado'
 });
+
+export default Estado
