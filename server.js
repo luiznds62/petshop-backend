@@ -9,7 +9,8 @@ import db from './database/db'
 // Controllers
 import usuario from './src/controllers/UsuarioController'
 import empresa from './src/controllers/EmpresaController'
-import estado from "./src/controllers/EstadoController"
+import estado  from './src/controllers/EstadoController'
+import cidade  from './src/controllers/CidadeController'
 
 let port = process.env.PORT || 3000
 let app = express()
@@ -29,7 +30,8 @@ db.sync()
 // Rotas
 app.use('/usuario', usuario)
 app.use('/empresa', empresa)
-app.use('/estado', estado)
+app.use('/estado' , estado)
+app.use('/cidade' , cidade)
 
 app.get('/', (req, res) => {
     res.send("Endpoint inválido")

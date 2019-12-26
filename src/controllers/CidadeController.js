@@ -1,12 +1,12 @@
 import express from "express"
-import estadoService from "../services/EstadoService"
+import cidadeService from "../services/CidadeService"
 import authMiddleware from '../middlewares/AuthMiddleware'
 
 let router = express.Router()
 router.use(authMiddleware)
 
 router.get('/', async (req, res) => {
-    res.send(await estadoService.buscarTodos(req, res))
+    res.send(await cidadeService.buscarTodos(req, res))
 })
 
 export default router
