@@ -8,7 +8,7 @@ Cidade.init({
         type: Sequelize.STRING,
         allowNull: false
     },
-    uf: {
+    idEstado: {
         type: Sequelize.BIGINT,
         references: {
             model: Estado,
