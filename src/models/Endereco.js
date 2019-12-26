@@ -1,5 +1,7 @@
 import Sequelize from 'sequelize'
 import db from '../../database/db'
+import Bairro from './Bairro'
+import Cidade from './Cidade'
 
 class Endereco extends Sequelize.Model { }
 Endereco.init({
@@ -15,7 +17,7 @@ Endereco.init({
         type: Sequelize.INTEGER,
         allowNull: false
     },
-    cidade: {
+    idCidade: {
         type: Sequelize.BIGINT,
         references: {
             model: Cidade,
@@ -23,7 +25,7 @@ Endereco.init({
         },
         allowNull: false
     },
-    bairro: {
+    idBairro: {
         type: Sequelize.BIGINT,
         references: {
             model: Bairro,
