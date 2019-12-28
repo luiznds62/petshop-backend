@@ -28,7 +28,7 @@ Empresa.init({
         type: Sequelize.DATE,
         defaultValue: Sequelize.NOW
     },
-    endereco: {
+    idEndereco: {
         type: Sequelize.BIGINT,
         references: {
             model: Endereco,

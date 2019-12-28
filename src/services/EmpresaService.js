@@ -115,6 +115,22 @@ async function validar(_empresa) {
     if (_empresa.nomeFantasia) {
         return "Nome Fantasia não informado"
     }
+
+    if(_empresa.idEndereco){
+        try {
+            let endereco = await Endereco.findOne({
+                where: {
+                    id: _empresa.idEndereco
+                }
+            })
+
+            if(endereco === null){
+                return "Endereco não encontrado"
+            }
+        } catch (err) {
+            return `Erro ao buscar endereco: ${err}`
+        }
+    }
 }
 
 service.buscarTodos = async (req, res) => {
