@@ -11,11 +11,14 @@ Endereco.init({
     },
     complemento: {
         type: Sequelize.STRING,
-        allowNull: false
+        defaultValue: ""
     },
     numero: {
         type: Sequelize.INTEGER,
         allowNull: false
+    },
+    cep: {
+        type: Sequelize.INTEGER
     },
     idCidade: {
         type: Sequelize.BIGINT,
@@ -32,8 +35,10 @@ Endereco.init({
             key: 'id'
         },
         allowNull: false
-    },
+    }
 }, {
     sequelize: db,
     modelName: 'endereco'
 });
+
+export default Endereco

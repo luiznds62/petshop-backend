@@ -28,3 +28,5 @@ UsuarioHasEmpresa.init({
     sequelize: db,
     modelName: 'usuariohasempresa'
 });
+
+export default UsuarioHasEmpresa

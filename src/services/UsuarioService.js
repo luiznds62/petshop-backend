@@ -44,68 +44,71 @@ async function validar(_usuario) {
         return "Email inválido"
     }
 
-    if (await buscarPorEmail(_usuario.email) != null) {
-        return "Email já utilizado"
-    }
-
     if (await buscarPorLogin(_usuario.login) != null) {
         return "Login já utilizado"
     }
+
+    if (await buscarPorEmail(_usuario.email) != null) {
+        return "Email já utilizado"
+    }
 }
 
-service.buscarTodos = async (req, res) => {
+service.buscarTodos = async () => {
     try {
         let usuarios = await Usuario.findAll()
-        return new ResponseBuilder(true, "Enviando usuários", usuarios)
+
+        if (!usuarios) {
+            return { err: 'Nenhum usuário encontrado' }
+        }
+
+        return usuarios
     }
     catch (err) {
-        return new ResponseBuilder(false, `Erro ao buscar usuários: ${err}`)
+        return { err: `Erro ao buscar usuários: ${err}` }
     }
 }
 
-service.salvarUsuario = async (req, res) => {
-    var insconsistencias = await validar(req.body)
+service.salvarUsuario = async (_usuario) => {
+    var insconsistencias = await validar(_usuario)
 
     if (insconsistencias) {
-        return new ResponseBuilder(false, insconsistencias)
+        return { err: insconsistencias }
     }
 
     try {
-        let usuarioNovo = await Usuario.create(req.body)
-        return new ResponseBuilder(true, "Criado usuário", usuarioNovo)
+        let usuarioNovo = await Usuario.create(_usuario)
+        return usuarioNovo
     }
     catch (err) {
-        return new ResponseBuilder(false, `Erro ao criar usuário: ${err}`, [])
+        return { err: `Erro ao criar usuário: ${err}` }
     }
 }
 
-service.autenticar = async (req, res) => {
+service.autenticar = async (_autentica) => {
     try {
-        var auth = req.body
+        var auth = _autentica
 
         if (!auth.login) {
-            return new ResponseBuilder(false, `Login não informado`, [])
+            return { err: `Login não informado` }
         }
 
         if (!auth.senha) {
-            return new ResponseBuilder(false, `Senha não informada`, [])
+            return { err: `Senha não informada` }
         }
 
-        let usuarioBanco = await buscarPorLogin(auth.login)
+        let usuario = await buscarPorLogin(auth.login)
 
-        if (!usuarioBanco) {
-            return new ResponseBuilder(false, `Usuário não encontrado`, [])
+        if (!usuario) {
+            return { err: `Usuário não encontrado` }
         }
 
-        if (usuarioBanco.senha != auth.senha) {
-            return new ResponseBuilder(false, `Senha inválida`, [])
+        if (usuario.senha != auth.senha) {
+            return { err: `Senha inválida` }
         }
 
-        return new ResponseBuilder(true, `Autenticado com sucesso`, { 
-            usuarioBanco, token: gerarToken({ id: usuarioBanco.id }) 
-        })
+        return { usuario, token: gerarToken({ id: usuario.id }) }
     } catch (err) {
-        return new ResponseBuilder(false, `Erro ao autenticar: ${err}`, [])
+        return { err: `Erro ao autenticar: ${err}` }
     }
 }
 

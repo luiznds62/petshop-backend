@@ -1,5 +1,6 @@
 import Sequelize from 'sequelize'
 import db from '../../database/db'
+import Endereco from './Endereco'
 
 class Empresa extends Sequelize.Model { }
 Empresa.init({
@@ -8,6 +9,7 @@ Empresa.init({
     },
     nomeFantasia: {
         type: Sequelize.STRING,
+        allowNull: false,
     },
     logo: {
         type: Sequelize.STRING
@@ -38,3 +40,5 @@ Empresa.init({
     sequelize: db,
     modelName: 'empresa'
 });
+
+export default Empresa
