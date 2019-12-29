@@ -26,6 +26,11 @@ UsuarioHasEmpresa.init({
         values: ['administrador', 'comum'],
         allowNull: false
     },
+    habilitado: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: true
+    }
 }, {
     sequelize: db,
     modelName: 'usuariohasempresa'

@@ -1,4 +1,5 @@
 import Bairro from '../models/Bairro'
+import Cidade from '../models/Cidade'
 
 let service = {}
 
@@ -14,6 +15,38 @@ service.buscarTodos = async () => {
     }
     catch (err) {
         return { err: `Erro ao buscar Bairros: ${err}` }
+    }
+}
+
+service.buscarPorIDCidade = async (_idCidade) => {
+    if (!_idCidade) {
+        return "ID da Cidade não informada"
+    } else {
+        let cidade = await Cidade.findOne({
+            where: {
+                id: _idCidade
+            }
+        })
+
+        if (!cidade) {
+            return { err: `Cidade com ID: ${_idCidade} não encontrada` }
+        }
+    }
+
+    try {
+        let bairros = await Bairro.findAll({
+            where: {
+                idCidade: _idCidade
+            }
+        })
+
+        if (!bairros) {
+            return { err: `Nenhum bairro encontrado para o idCidade: ${_idCidade}` }
+        }
+
+        return bairros
+    } catch (err) {
+        return { err: `Erro ao buscar cidade por ID: ${err}` }
     }
 }
 

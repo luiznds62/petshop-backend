@@ -61,6 +61,96 @@ service.salvarUsuarioHasEmpresa = async (_usuarioHasEmpresa) => {
     }
 }
 
+service.vincularUsuarioDeEmpresa = async (_idEmpresa,_idUsuario) => {
+    if (!_idUsuario) {
+        return { err: "ID do usuário não informado" }
+    } else {
+        let usuario = await Usuario.findOne({
+            where: {
+                id: _idUsuario
+            }
+        })
+
+        if (!usuario) {
+            return { err: `Usuário com ID: ${_idUsuario} não encontrado` }
+        }
+    }
+
+    if (!_idEmpresa) {
+        return { err: "Id da empresa não informado" }
+    } else {
+        let empresa = await Empresa.findOne({
+            where: {
+                id: _idEmpresa
+            }
+        })
+
+        if (!empresa) {
+            return { err: `Empresa com ID: ${_idEmpresa} não encontrada` }
+        }
+    }
+
+    try {
+        let usuarioHasEmpresaAtualizar = await UsuarioHasEmpresa.update({
+            habilitado: true
+        },{
+            where: {
+                idUsuario: _idUsuario,
+                idEmpresa: _idEmpresa
+            }
+        })
+
+        return usuarioHasEmpresaAtualizar
+    } catch (err) {
+        return { err: `Ocorreu um erro ao habilitar usuário da empresa: ${err}` }
+    }
+}
+
+service.desvincularUsuarioDeEmpresa = async (_idEmpresa,_idUsuario) => {
+    if (!_idUsuario) {
+        return { err: "ID do usuário não informado" }
+    } else {
+        let usuario = await Usuario.findOne({
+            where: {
+                id: _idUsuario
+            }
+        })
+
+        if (!usuario) {
+            return { err: `Usuário com ID: ${_idUsuario} não encontrado` }
+        }
+    }
+
+    if (!_idEmpresa) {
+        return { err: "Id da empresa não informado" }
+    } else {
+        let empresa = await Empresa.findOne({
+            where: {
+                id: _idEmpresa
+            }
+        })
+
+        if (!empresa) {
+            return { err: `Empresa com ID: ${_idEmpresa} não encontrada` }
+        }
+    }
+
+    try {
+        let usuarioHasEmpresaAtualizar = await UsuarioHasEmpresa.update({
+            habilitado: false
+        },{
+            where: {
+                idUsuario: _idUsuario,
+                idEmpresa: _idEmpresa
+            }
+        })
+
+        return usuarioHasEmpresaAtualizar
+    } catch (err) {
+        return { err: `Ocorreu um erro ao desabilitar usuário da empresa: ${err}` }
+    }
+}
+
 service.buscarPorUsuario = async (_idUsuario) => {
     if (!_idUsuario) {
         return { err: "ID do Usuário não informado" }

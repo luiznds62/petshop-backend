@@ -13,8 +13,8 @@ import estado from './src/controllers/EstadoController'
 import cidade from './src/controllers/CidadeController'
 import bairro from './src/controllers/BairroController'
 import endereco from './src/controllers/EnderecoController'
+import pessoa from './src/controllers/PessoaController'
 import usuariohasempresa from './src/controllers/UsuarioHasEmpresaController'
-
 
 let port = process.env.PORT || 3000
 let app = express()
@@ -39,6 +39,7 @@ app.use('/cidade', cidade)
 app.use('/bairro', bairro)
 app.use('/endereco', endereco)
 app.use('/usuariohasempresa', usuariohasempresa)
+app.use('/pessoa', pessoa)
 
 app.get('/', (req, res) => {
     res.send("Endpoint inválido")
