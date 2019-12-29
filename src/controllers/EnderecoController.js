@@ -16,6 +16,16 @@ router.get('/', async (req, res) => {
     res.send(new ResponseBuilder(true, 'Endereços encontrados com sucesso', enderecos))
 })
 
+router.get('/:id', async (req, res) => {
+    let endereco = await enderecoService.buscarPorId(req.params.id)
+
+    if (endereco.err) {
+        res.send(new ResponseBuilder(false, endereco.err))
+    }
+
+    res.send(new ResponseBuilder(true, 'Endereço encontrado com sucesso', endereco))
+})
+
 router.post('/', async (req, res) => {
     let endereco = await enderecoService.salvarEndereco(req.body)
 

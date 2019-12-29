@@ -88,12 +88,24 @@ function validaCPF(cpf) {
         return false;
 }
 
-async function validar(_empresa) {
+async function validar(_empresa, _operacao) {
+    if(_operacao === 'atualizar'){
+        let empresaAtualizar = await Empresa.findOne({
+            where: {
+                id: _empresa.id
+            }
+        })
+
+        if(empresaAtualizar === null){
+            return "Empresa não encontrada"
+        }
+    }
+
     if (!_empresa.cpfCnpj) {
         return "Cpf/Cnpj não foi informado"
     } else {
         if (_empresa.cpfCnpj.length == 11) {
-            if (validaCPF(_empresa.cpfCnpj)) {
+            if (!validaCPF(_empresa.cpfCnpj)) {
                 return "Cpf inválido"
             }
         }
@@ -102,7 +114,7 @@ async function validar(_empresa) {
                 return "Razão Social não informada"
             }
 
-            if (validarCNPJ(_empresa.cpfCnpj)) {
+            if (!validarCNPJ(_empresa.cpfCnpj)) {
                 return "Cnpj inválido"
             }
         }
@@ -110,13 +122,23 @@ async function validar(_empresa) {
         if (_empresa.cpfCnpj.length != 11 && _empresa.cpfCnpj.length != 14) {
             return "Cpf/Cnpj inválido"
         }
+
+        let empresaVerificar = await Empresa.findOne({
+            where: {
+                cpfCnpj: _empresa.cpfCnpj
+            }
+        })
+
+        if (empresaVerificar != null) {
+            return "Cpf/Cnpj já utilizado"
+        }
     }
 
-    if (_empresa.nomeFantasia) {
+    if (!_empresa.nomeFantasia) {
         return "Nome Fantasia não informado"
     }
 
-    if(_empresa.idEndereco){
+    if (_empresa.idEndereco) {
         try {
             let endereco = await Endereco.findOne({
                 where: {
@@ -124,7 +146,7 @@ async function validar(_empresa) {
                 }
             })
 
-            if(endereco === null){
+            if (endereco === null) {
                 return "Endereco não encontrado"
             }
         } catch (err) {
@@ -133,23 +155,96 @@ async function validar(_empresa) {
     }
 }
 
-service.buscarTodos = async (req, res) => {
+service.buscarTodos = async () => {
     try {
         let empresas = await Empresa.findAll()
 
         if (empresas.length === 0) {
-            return new ResponseBuilder(false, `Nenhuma empresa encontrada`)
+            return { err: `Nenhuma empresa encontrada` }
         }
 
-        return new ResponseBuilder(true, "Enviando empresas", empresas)
+        return empresas
     }
     catch (err) {
-        return new ResponseBuilder(false, `Erro ao buscar empresas: ${err}`)
+        return { err: `Erro ao buscar empresas: ${err}` }
     }
 }
 
-service.salvarEmpresa = async (req, res) => {
+service.salvarEmpresa = async (_empresa) => {
+    let inconsistencias = await validar(_empresa, 'salvar')
 
+    if (inconsistencias) {
+        return { err: inconsistencias }
+    }
+
+    try {
+        return await Empresa.create(_empresa)
+    } catch (err) {
+        return { err: `Erro ao salvar a empresa: ${err}` }
+    }
+}
+
+service.buscarPorId = async (_id) => {
+    if (!_id) {
+        return "Id não informado"
+    }
+
+    try {
+        let empresa = await Empresa.findOne({
+            where: {
+                id: _id
+            }
+        })
+
+        if (empresa === null) {
+            return { err: "Nenhuma empresa encontrada" }
+        }
+
+        return empresa
+    } catch (err) {
+        return { err: `Erro ao buscar empresa: ${err}` }
+    }
+}
+
+service.atualizarEmpresa = async (_empresaAtualizar) => {
+    let inconsistencias = await validar(_empresaAtualizar, 'atualizar')
+
+    if (inconsistencias) {
+        return { err: inconsistencias }
+    }
+
+    try {
+        let empresaAtualizar = await Empresa.update({
+            razaoSocial: _empresaAtualizar.razaoSocial,
+            nomeFantasia: _empresaAtualizar.nomeFantasia,
+            cpfCnpj: _empresaAtualizar.cpfCnpj,
+            idEndereco: _empresaAtualizar.idEndereco
+        },{
+            where: {
+                id: _empresaAtualizar.id
+            }
+        })
+
+        return empresaAtualizar
+    } catch (err) {
+        return { err: `Erro ao atualizar: ${err}` }
+    }
+}
+
+service.deletarEmpresa = async (_id) => {
+    if (!_id) {
+        return "Id não informada"
+    }
+
+    try {
+        return await Empresa.destroy({
+            where: {
+                id: _id
+            }
+        })
+    } catch (err) {
+        return { err: `Erro ao deletar a empresa: ${err}` }
+    }
 }
 
 export default service

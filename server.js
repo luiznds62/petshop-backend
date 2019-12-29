@@ -7,12 +7,13 @@ import cors from "cors"
 import db from './database/db'
 
 // Controllers
-import usuario  from './src/controllers/UsuarioController'
-import empresa  from './src/controllers/EmpresaController'
-import estado   from './src/controllers/EstadoController'
-import cidade   from './src/controllers/CidadeController'
-import bairro   from './src/controllers/BairroController' 
+import usuario from './src/controllers/UsuarioController'
+import empresa from './src/controllers/EmpresaController'
+import estado from './src/controllers/EstadoController'
+import cidade from './src/controllers/CidadeController'
+import bairro from './src/controllers/BairroController'
 import endereco from './src/controllers/EnderecoController'
+import usuariohasempresa from './src/controllers/UsuarioHasEmpresaController'
 
 
 let port = process.env.PORT || 3000
@@ -31,12 +32,13 @@ db.authenticate().then(() => {
 db.sync()
 
 // Rotas
-app.use('/usuario' , usuario)
-app.use('/empresa' , empresa)
-app.use('/estado'  , estado)
-app.use('/cidade'  , cidade)
-app.use('/bairro'  , bairro)
+app.use('/usuario', usuario)
+app.use('/empresa', empresa)
+app.use('/estado', estado)
+app.use('/cidade', cidade)
+app.use('/bairro', bairro)
 app.use('/endereco', endereco)
+app.use('/usuariohasempresa', usuariohasempresa)
 
 app.get('/', (req, res) => {
     res.send("Endpoint inválido")

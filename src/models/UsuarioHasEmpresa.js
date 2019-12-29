@@ -1,9 +1,11 @@
 import Sequelize from 'sequelize'
 import db from '../../database/db'
+import Usuario from './Usuario'
+import Empresa from './Empresa'
 
 class UsuarioHasEmpresa extends Sequelize.Model { }
 UsuarioHasEmpresa.init({
-    usuario: {
+    idUsuario: {
         type: Sequelize.BIGINT,
         references: {
             model: Usuario,
@@ -11,7 +13,7 @@ UsuarioHasEmpresa.init({
         },
         allowNull: false
     },
-    empresa: {
+    idEmpresa: {
         type: Sequelize.BIGINT,
         references: {
             model: Empresa,

@@ -12,8 +12,8 @@ async function validar(_endereco) {
 
     if (!_endereco.numero) {
         return "Número não informado"
-    }else{
-        if(isNaN(parseFloat(_endereco.numero)) && !isFinite(_endereco.numero)){
+    } else {
+        if (isNaN(parseFloat(_endereco.numero)) && !isFinite(_endereco.numero)) {
             return "Número inválido"
         }
     }
@@ -52,6 +52,28 @@ async function validar(_endereco) {
         } catch (err) {
             return `Erro ao buscar bairro: ${err}`
         }
+    }
+}
+
+service.buscarPorId = async (_id) => {
+    if (!_id) {
+        return { err: "ID não informado" }
+    }
+
+    try {
+        let endereco = await Endereco.findOne({
+            where: {
+                id: _id
+            }
+        })
+
+        if (!endereco) {
+            return { err: `Endereço não encontrado para o ID: ${_id}` }
+        }
+
+        return endereco
+    } catch (err) {
+        return { err: `Erro ao buscar endereço: ${err}` }
     }
 }
 

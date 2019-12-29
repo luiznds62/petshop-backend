@@ -2,7 +2,7 @@ import Estado from '../models/Estado'
 
 let service = {}
 
-service.buscarTodos = async (req, res) => {
+service.buscarTodos = async () => {
     try {
         let estados = await Estado.findAll()
 
@@ -14,6 +14,30 @@ service.buscarTodos = async (req, res) => {
     }
     catch (err) {
         return { err: `Erro ao buscar estados: ${err}` }
+    }
+}
+
+service.buscarPorUf = async (_uf) => {
+    if (!_uf) {
+        return { err: "UF não informado" }
+    }else{
+        _uf = _uf.toUpperCase()
+    }
+
+    try {
+        let estado = await Estado.findOne({
+            where: {
+                sigla: _uf
+            }
+        })
+
+        if (!estado) {
+            return { err: `Nenhum estado encontrado para a UF: ${_uf}` }
+        }
+
+        return estado
+    } catch (err) {
+        return { err: `Erro ao buscar Estado por UF: ${err}` }
     }
 }
 

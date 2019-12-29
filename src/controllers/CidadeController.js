@@ -13,7 +13,27 @@ router.get('/', async (req, res) => {
         res.send(new ResponseBuilder(false, cidades.err))
     }
 
-    res.send(new ResponseBuilder(true,'Cidades encontradas com sucesso',cidades))
+    res.send(new ResponseBuilder(true, 'Cidades encontradas com sucesso', cidades))
+})
+
+router.get('/:id', async (req, res) => {
+    let cidade = await cidadeService.buscarPorId(req.params.id)
+
+    if (cidade.err) {
+        res.send(new ResponseBuilder(false, cidade.err))
+    }
+
+    res.send(new ResponseBuilder(true, 'Cidade encontrada com sucesso', cidade))
+})
+
+router.get('/:uf/:nome', async (req, res) => {
+    let cidade = await cidadeService.buscarPorUFNome(req.params.uf,req.params.nome)
+
+    if (cidade.err) {
+        res.send(new ResponseBuilder(false, cidade.err))
+    }
+
+    res.send(new ResponseBuilder(true, 'Cidade encontrada com sucesso', cidade))
 })
 
 export default router

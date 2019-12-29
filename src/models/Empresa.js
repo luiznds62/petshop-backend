@@ -6,13 +6,15 @@ class Empresa extends Sequelize.Model { }
 Empresa.init({
     razaoSocial: {
         type: Sequelize.STRING,
+        defaultValue: ''
     },
     nomeFantasia: {
         type: Sequelize.STRING,
         allowNull: false,
     },
     logo: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        defaultValue: ''
     },
     cpfCnpj: {
         type: Sequelize.BIGINT,
@@ -33,8 +35,7 @@ Empresa.init({
         references: {
             model: Endereco,
             key: 'id'
-        },
-        allowNull: false
+        }
     }
 }, {
     sequelize: db,

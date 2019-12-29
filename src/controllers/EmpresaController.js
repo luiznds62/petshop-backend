@@ -16,8 +16,25 @@ router.get('/', async (req, res) => {
     res.send(new ResponseBuilder(true, 'Empresas encontradas com sucesso', empresas))
 })
 
+router.get('/:id', async (req, res) => {
+    let empresa = await empresaService.buscarPorId(req.params.id)
+
+    if (empresa.err) {
+        res.send(new ResponseBuilder(false, empresa.err))
+    }
+    console.log('teste')
+
+    res.send(new ResponseBuilder(true, 'Empresa encontrada com sucesso', empresa))
+})
+
 router.put('/', async (req, res) => {
-    res.send(await empresaService.atualizarEmpresa(req, res))
+    let empresaAtualizada = await empresaService.atualizarEmpresa(req.body)
+
+    if (empresaAtualizada.err) {
+        res.send(new ResponseBuilder(false, empresaAtualizada.err))
+    }
+
+    res.send(new ResponseBuilder(true, 'Empresa atualizada com sucesso', empresaAtualizada))
 })
 
 router.post('/', async (req, res) => {
@@ -30,8 +47,14 @@ router.post('/', async (req, res) => {
     res.send(new ResponseBuilder(true, 'Empresa salva com sucesso', empresa))
 })
 
-router.delete('/', async (req, res) => {
-    res.send(await empresaService.deletarEmpresa(req, res))
+router.delete('/:id', async (req, res) => {
+    let empresaDeletada = await empresaService.deletarEmpresa(req.params.id)
+
+    if (empresaDeletada.err) {
+        res.send(new ResponseBuilder(false, empresaDeletada.err))
+    }
+
+    res.send(new ResponseBuilder(true, 'Empresa deletada com sucesso', empresaDeletada))
 })
 
 export default router
