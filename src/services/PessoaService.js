@@ -2,6 +2,16 @@ import Pessoa from '../models/Pessoa'
 
 let service = {}
 
+async function validar(_pessoa){
+    if(!_pessoa.nome){
+        return "Nome não informado"
+    }
+
+    if(!_pessoa.cpf){
+        return "CPF não informado"
+    }
+}
+
 service.buscarTodos = async () => {
     try {
         let pessoas = await Pessoa.findAll()
@@ -40,7 +50,7 @@ service.buscarPorId = async (_id) => {
 }
 
 service.salvarPessoa = async (_pessoa) => {
-    let inconsistencias = await validator(_pessoa)
+    let inconsistencias = await validar(_pessoa)
 
     if (inconsistencias) {
         return { err: inconsistencias }
