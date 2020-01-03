@@ -36,6 +36,16 @@ router.post('/', async (req, res) => {
     res.send(new ResponseBuilder(true, "Pessoa salva com sucesso", pessoa))
 })
 
+router.put('/:id', async (req, res) => {
+    let pessoa = await pessoaService.atualizarPessoa(req.params.id,req.body)
+
+    if (pessoa.err) {
+        res.send(new ResponseBuilder(false, pessoa.err))
+    }
+
+    res.send(new ResponseBuilder(true, "Pessoa atualizada com sucesso", pessoa))
+})
+
 router.delete('/:id', async (req, res) => {
     let pessoa = await pessoaService.deletarPessoa(req.params.id)
 
