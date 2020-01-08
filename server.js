@@ -14,6 +14,7 @@ import cidade from './src/controllers/CidadeController'
 import bairro from './src/controllers/BairroController'
 import endereco from './src/controllers/EnderecoController'
 import pessoa from './src/controllers/PessoaController'
+import cliente from './src/controllers/ClienteController'
 import usuariohasempresa from './src/controllers/UsuarioHasEmpresaController'
 
 let port = process.env.PORT || 3000
@@ -40,6 +41,7 @@ app.use('/bairro', bairro)
 app.use('/endereco', endereco)
 app.use('/usuariohasempresa', usuariohasempresa)
 app.use('/pessoa', pessoa)
+app.use('/cliente', cliente)
 
 app.get('/', (req, res) => {
     res.send("Endpoint inválido")

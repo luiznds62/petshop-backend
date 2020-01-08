@@ -53,6 +53,7 @@ validador.validarCNPJ = (cnpj) => {
 }
 
 validador.validarCPF = (cpf) => {
+    cpf = cpf.toString()
     var numeros, digitos, soma, i, resultado, digitos_iguais;
     digitos_iguais = 1;
     if (cpf.length < 11)

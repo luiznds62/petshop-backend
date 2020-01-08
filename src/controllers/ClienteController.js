@@ -53,7 +53,7 @@ router.delete('/:id', async (req, res) => {
         res.send(new ResponseBuilder(false, cliente.err))
     }
 
-    res.send(new ResponseBuilder(true, "Cliente deletada com sucesso", cliente))
+    res.send(new ResponseBuilder(true, "Cliente deletado com sucesso", cliente))
 })
 
 export default router

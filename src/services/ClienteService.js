@@ -7,34 +7,63 @@ let service = {}
 async function validar(_cliente, _acao) {
     if (!_cliente.idPessoa) {
         return "Dados pessoais não informados"
-    }else{
+    } else {
         let pessoa = await Pessoa.findOne({
             where: {
                 id: _cliente.idPessoa
             }
         })
 
-        if(!pessoa){
+        if (!pessoa) {
             return "Dados pessoais não encontrados"
+        } else if(_acao === 'criacao'){
+
+            let clienteJaExistente = await Cliente.findOne({
+                where: {
+                    idPessoa: _cliente.idPessoa
+                }
+            })
+
+            if (clienteJaExistente) {
+                return "Cliente já cadastrado"
+            }
         }
     }
 
-    if(!_cliente.idEndereco){
+    if (!_cliente.idEndereco) {
         return "Endereço não informado"
-    }else{
+    } else {
         let endereco = await Endereco.findOne({
             where: {
-                id: _cliente.endereco
+                id: _cliente.idEndereco
             }
         })
 
-        if(!endereco){
+        if (!endereco) {
             return "Endereço não encontrado"
         }
     }
 
-    if(!_cliente.telefonePrincipal){
+    if (!_cliente.telefonePrincipal) {
         return "Telefone não informado"
+    } else {
+        let mascara = /[^0-9.]/
+        if (mascara.test(_cliente.telefonePrincipal)) {
+            return "Telefone inválido"
+        }
+    }
+
+    if (!_cliente.telefoneAlternativo) {
+        return "Telefone alternativo não informado"
+    } else {
+        let mascara = /[^0-9.]/
+        if (mascara.test(_cliente.telefoneAlternativo)) {
+            return "Telefone alternativo inválido"
+        }
+    }
+
+    if (_cliente.telefonePrincipal === _cliente.telefoneAlternativo) {
+        return "Os telefones não podem ser iguais"
     }
 }
 
@@ -43,7 +72,7 @@ service.buscarTodos = async () => {
         let clientes = await Cliente.findAll()
 
         if (clientes.length === 0) {
-            return { err: `Nenhuma cliente encontrado` }
+            return { err: `Nenhum cliente encontrado` }
         }
 
         return clientes
