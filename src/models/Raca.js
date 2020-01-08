@@ -1,8 +1,9 @@
 import Sequelize from 'sequelize'
 import db from '../../database/db'
+import Especie from './especie';
 
-class Especie extends Sequelize.Model { }
-Especie.init({
+class Raca extends Sequelize.Model { }
+Raca.init({
     nome: {
         type: Sequelize.STRING,
         allowNull: false
@@ -12,7 +13,7 @@ Especie.init({
     }
 }, {
     sequelize: db,
-    modelName: 'especie'
+    modelName: 'raca'
 });
 
-export default Especie
+export default Raca
