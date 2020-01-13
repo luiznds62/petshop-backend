@@ -3,13 +3,13 @@ import Especie from '../models/Especie'
 
 let service = {}
 
-async function validar(_especie, _acao) {
-    if(!_especie.nome){
+async function validar(_animal, _acao) {
+    if(!_animal.nome){
         return "Nome não informado"
     }else{
         let especieJaExistente = await Especie.findOne({
             where: {
-                nome: _especie.nome
+                nome: _animal.nome
             }
         })
 
@@ -56,15 +56,15 @@ service.buscarPorId = async (_id) => {
     }
 }
 
-service.salvarEspecie = async (_especie) => {
-    let inconsistencias = await validar(_especie, 'criacao')
+service.salvarEspecie = async (_animal) => {
+    let inconsistencias = await validar(_animal, 'criacao')
 
     if (inconsistencias) {
         return { err: inconsistencias }
     }
 
     try {
-        let especieNova = await Especie.create(_especie)
+        let especieNova = await Especie.create(_animal)
 
         return especieNova
     } catch (err) {
@@ -72,8 +72,8 @@ service.salvarEspecie = async (_especie) => {
     }
 }
 
-service.atualizarEspecie = async (_id, _especie) => {
-    let inconsistencias = await validar(_especie, 'atualizacao')
+service.atualizarEspecie = async (_id, _animal) => {
+    let inconsistencias = await validar(_animal, 'atualizacao')
 
     if (inconsistencias) {
         return { err: inconsistencias }
@@ -81,8 +81,8 @@ service.atualizarEspecie = async (_id, _especie) => {
 
     try {
         let especieAtualizada = await especie.update({
-            nome: _especie.nome,
-            descricao: _especie.descricao
+            nome: _animal.nome,
+            descricao: _animal.descricao
         }, {
             where: {
                 id: _id
