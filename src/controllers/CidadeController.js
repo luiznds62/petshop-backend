@@ -27,13 +27,23 @@ router.get('/:id', async (req, res) => {
 })
 
 router.get('/:uf/:nome', async (req, res) => {
-    let cidade = await cidadeService.buscarPorUFNome(req.params.uf,req.params.nome)
+    let cidade = await cidadeService.buscarPorUFNome(req.params.uf, req.params.nome)
 
     if (cidade.err) {
         res.send(new ResponseBuilder(false, cidade.err))
     }
 
     res.send(new ResponseBuilder(true, 'Cidade encontrada com sucesso', cidade))
+})
+
+router.post('/', async (req, res) => {
+    let cidade = await cidadeService.salvarCidade(req.body)
+
+    if (cidade.err) {
+        res.send(new ResponseBuilder(false, cidade.err))
+    }
+
+    res.send(new ResponseBuilder(true, "Cidade salva com sucesso", cidade))
 })
 
 export default router

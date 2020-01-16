@@ -3,6 +3,26 @@ import Estado from '../models/Estado'
 
 let service = {}
 
+async function validar(_cidade) {
+    if (!_cidade.nome) {
+        return "Nome não informado"
+    }
+
+    if (!_cidade.idEstado) {
+        return "Estado não informado"
+    } else {
+        let estadoExiste = await Estado.findOne({
+            where: {
+                id: _cidade.idEstado
+            }
+        })
+
+        if (!estadoExiste) {
+            return "Estado não existente"
+        }
+    }
+}
+
 service.buscarTodos = async () => {
     try {
         let cidades = await Cidade.findAll()
@@ -44,7 +64,7 @@ service.buscarPorUFNome = async (_uf, _nome) => {
     if (!_nome) {
         return { err: "Nome não informado" }
     }
-    
+
     if (!_uf) {
         return { err: "UF não informada" }
     } else {
@@ -76,6 +96,22 @@ service.buscarPorUFNome = async (_uf, _nome) => {
         }
     } catch (err) {
         return { err: `Erro ao buscar Cidade: ${err}` }
+    }
+}
+
+service.salvarCidade = async (_cidade) => {
+    let inconsistencias = await validar(_cidade)
+
+    if (inconsistencias) {
+        return { err: inconsistencias }
+    }
+
+    try {
+        let cidadeNova = await Cidade.create(_cidade)
+
+        return cidadeNova
+    } catch (error) {
+        return { err: "Erro ao salvar cidade" }
     }
 }
 

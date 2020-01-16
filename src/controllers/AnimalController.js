@@ -13,7 +13,7 @@ router.get('/', async (req, res) => {
         res.send(new ResponseBuilder(false, animais.err))
     }
 
-    res.send(new ResponseBuilder(true, "Animais buscadas com sucesso", animais))
+    res.send(new ResponseBuilder(true, "Animais buscados com sucesso", animais))
 })
 
 router.get('/:id', async (req, res) => {
@@ -23,7 +23,7 @@ router.get('/:id', async (req, res) => {
         res.send(new ResponseBuilder(false, animal.err))
     }
 
-    res.send(new ResponseBuilder(true, "Animal buscada com sucesso", animal))
+    res.send(new ResponseBuilder(true, "Animal buscado com sucesso", animal))
 })
 
 router.post('/', async (req, res) => {
@@ -33,7 +33,7 @@ router.post('/', async (req, res) => {
         res.send(new ResponseBuilder(false, animal.err))
     }
 
-    res.send(new ResponseBuilder(true, "Animal salva com sucesso", animal))
+    res.send(new ResponseBuilder(true, "Animal salvo com sucesso", animal))
 })
 
 router.put('/:id', async (req, res) => {
@@ -43,7 +43,7 @@ router.put('/:id', async (req, res) => {
         res.send(new ResponseBuilder(false, animal.err))
     }
 
-    res.send(new ResponseBuilder(true, "Animal atualizada com sucesso", animal))
+    res.send(new ResponseBuilder(true, "Animal atualizado com sucesso", animal))
 })
 
 router.delete('/:id', async (req, res) => {
@@ -53,7 +53,7 @@ router.delete('/:id', async (req, res) => {
         res.send(new ResponseBuilder(false, animal.err))
     }
 
-    res.send(new ResponseBuilder(true, "Animal deletada com sucesso", animal))
+    res.send(new ResponseBuilder(true, "Animal deletado com sucesso", animal))
 })
 
 export default router

@@ -1,36 +1,75 @@
-import especie from '../models/especie'
+import validadorDatas from '../common/ValidadorDatas'
 import Especie from '../models/Especie'
+import Raca from '../models/Raca'
+import Cliente from '../models/Cliente'
+import Animal from '../models/Animal'
 
 let service = {}
 
 async function validar(_animal, _acao) {
-    if(!_animal.nome){
+    if (!_animal.nome) {
         return "Nome não informado"
+    }
+
+    if(!_animal.idCliente){
+        return "Cliente responsável não informado"
     }else{
-        let especieJaExistente = await Especie.findOne({
+        let clienteExiste = await Cliente.findOne({
             where: {
-                nome: _animal.nome
+                id: _animal.idCliente
             }
         })
 
-        if(especieJaExistente){
-            return "especie já cadastrada"
+        if(!clienteExiste){
+            return "Cliente não existente"
         }
+    }
+
+    if (!_animal.idEspecie) {
+        return "Espécie não informada"
+    } else {
+        let especieExiste = await Especie.findOne({
+            where: {
+                id: _animal.idEspecie
+            }
+        })
+
+        if (!especieExiste) {
+            return "Especie não existente"
+        }
+    }
+
+    if (!_animal.idRaca) {
+        return "Raça não informada"
+    } else {
+        let racaExiste = await Raca.findOne({
+            where: {
+                id: _animal.idRaca
+            }
+        })
+
+        if (!racaExiste) {
+            return "Raça não existente"
+        }
+    }
+
+    if (_animal.dataNascimento) {
+        validadorDatas.validarData(_animal.dataNascimento)
     }
 }
 
 service.buscarTodos = async () => {
     try {
-        let especies = await Especie.findAll()
+        let animais = await Animal.findAll()
 
-        if (especies.length === 0) {
-            return { err: `Nenhuma especie encontrado` }
+        if (animais.length === 0) {
+            return { err: `Nenhum animal encontrado` }
         }
 
-        return especies
+        return animais
     }
     catch (err) {
-        return { err: `Erro ao buscar especies: ${err}` }
+        return { err: `Erro ao buscar animais: ${err}` }
     }
 }
 
@@ -40,23 +79,23 @@ service.buscarPorId = async (_id) => {
     }
 
     try {
-        let especie = await Especie.findOne({
+        let animal = await Animal.findOne({
             where: {
                 id: _id
             }
         })
 
-        if (!especie) {
-            return { err: `Especie com ID: ${_id} não encontrado` }
+        if (!animal) {
+            return { err: `Animal não encontrado` }
         }
 
-        return especie
+        return animal
     } catch (err) {
         return { err: `Erro ao buscar especie: ${err}` }
     }
 }
 
-service.salvarEspecie = async (_animal) => {
+service.salvarAnimal = async (_animal) => {
     let inconsistencias = await validar(_animal, 'criacao')
 
     if (inconsistencias) {
@@ -64,15 +103,15 @@ service.salvarEspecie = async (_animal) => {
     }
 
     try {
-        let especieNova = await Especie.create(_animal)
+        let animalNovo = await Animal.create(_animal)
 
-        return especieNova
+        return animalNovo
     } catch (err) {
-        return { err: `Erro ao salvar especie: ${err}` }
+        return { err: `Erro ao salvar animal: ${err}` }
     }
 }
 
-service.atualizarEspecie = async (_id, _animal) => {
+service.atualizarAnimal = async (_id, _animal) => {
     let inconsistencias = await validar(_animal, 'atualizacao')
 
     if (inconsistencias) {
@@ -80,46 +119,50 @@ service.atualizarEspecie = async (_id, _animal) => {
     }
 
     try {
-        let especieAtualizada = await especie.update({
+        let animalAtualizado = await Animal.update({
             nome: _animal.nome,
-            descricao: _animal.descricao
+            dataNascimento: _animal.dataNascimento,
+            cor: _animal.cor,
+            idCliente: _animal.idCliente,
+            idEspecie: _animal.idEspecie,
+            idRaca: _animal.idRaca
         }, {
             where: {
                 id: _id
             }
         })
 
-        return especieAtualizada
+        return animalAtualizado
     } catch (err) {
         return { err: `Ocorreu um erro ao atualizar: ${err}` }
     }
 }
 
-service.deletarEspecie = async (_id) => {
+service.deletarAnimal = async (_id) => {
     if (!_id) {
         return { err: "ID não informado" }
     } else {
-        let especieDeletar = await Especie.findOne({
+        let animalDeletar = await Animal.findOne({
             where: {
                 id: _id
             }
         })
 
-        if (!especieDeletar) {
-            return { err: `Especie com ID: ${_id} não encontrado` }
+        if (!animalDeletar) {
+            return { err: `Animal não encontrado` }
         }
     }
 
     try {
-        let especieDeletado = await Especie.destroy({
+        let animalDeletado = await Animal.destroy({
             where: {
                 id: _id
             }
         })
 
-        return especieDeletado
+        return animalDeletado
     } catch (err) {
-        return { err: `Erro ao deletar especie: ${err}` }
+        return { err: `Erro ao deletar animal: ${err}` }
     }
 }
 

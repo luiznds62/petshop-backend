@@ -1,7 +1,9 @@
 import Sequelize from 'sequelize'
 import db from '../../database/db'
-import Especie from './especie';
+import Especie from './Especie';
 import Raca from './Raca';
+import Cliente from './Cliente';
+
 
 class Animal extends Sequelize.Model { }
 Animal.init({
@@ -14,6 +16,13 @@ Animal.init({
     },
     cor: {
         type: Sequelize.STRING
+    },
+    idCliente: {
+        type: Sequelize.BIGINT,
+        references: {
+            model: Cliente,
+            key: 'id'
+        }
     },
     idEspecie: {
         type: Sequelize.BIGINT,

@@ -26,4 +26,14 @@ router.get('/:uf', async (req, res) => {
     res.send(new ResponseBuilder(true, 'Estado encontrado com sucesso', estado))
 })
 
+router.post('/', async (req, res) => {
+    let estado = await estadoService.salvarEstado(req.body)
+
+    if (estado.err) {
+        res.send(new ResponseBuilder(false, estado.err))
+    }
+
+    res.send(new ResponseBuilder(true, "Estado salvo com sucesso", estado))
+})
+
 export default router

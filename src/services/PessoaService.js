@@ -1,5 +1,6 @@
 import Pessoa from '../models/Pessoa'
 import validadorCpfCnpj from '../common/ValidadorCpfCnpj'
+import validadorDatas from '../common/ValidadorDatas'
 
 let service = {}
 
@@ -29,10 +30,7 @@ async function validar(_pessoa, _acao) {
     if (!_pessoa.dataNascimento) {
         return "Data de nascimento não informada"
     } else {
-        let mascara = /^[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/
-        if (!mascara.test(_pessoa.dataNascimento)) {
-            return "Data inválida"
-        }
+        validadorDatas.validarData(_pessoa.dataNascimento)
     }
 
     if (!_pessoa.genero) {
