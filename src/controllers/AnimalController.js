@@ -7,17 +7,20 @@ let router = express.Router()
 router.use(authMiddleware)
 
 router.get('/', async (req, res) => {
-    let animais = await animalService.buscarTodos()
+    try {
+        let animais = await animalService.buscarTodos(req.query.offset, req.query.limit, req.query.order)
+        if (animais.err) {
+            res.send(new ResponseBuilder(false, animais.err))
+        }
 
-    if (animais.err) {
-        res.send(new ResponseBuilder(false, animais.err))
+        res.send(new ResponseBuilder(true, "Animais buscados com sucesso", animais.obj, animais.proximo, animais.offset, req.query.limit, animais.total))
+    } catch (error) {
+        res.send(new ResponseBuilder(false, 'Erro interno do servidor'))
     }
-
-    res.send(new ResponseBuilder(true, "Animais buscados com sucesso", animais))
 })
 
 router.get('/:id', async (req, res) => {
-    let animal = await animalService.buscarPorId(req.params.id)
+    let animal = await animalService.buscarPorId(req.params.id, req.query.offset, req.query.limit, req.query.order)
 
     if (animal.err) {
         res.send(new ResponseBuilder(false, animal.err))
@@ -37,7 +40,7 @@ router.post('/', async (req, res) => {
 })
 
 router.put('/:id', async (req, res) => {
-    let animal = await animalService.atualizarAnimal(req.params.id,req.body)
+    let animal = await animalService.atualizarAnimal(req.params.id, req.body)
 
     if (animal.err) {
         res.send(new ResponseBuilder(false, animal.err))

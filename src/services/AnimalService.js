@@ -58,15 +58,28 @@ async function validar(_animal, _acao) {
     }
 }
 
-service.buscarTodos = async () => {
+service.buscarTodos = async (offset = 0, limit = 25, order = "ASC") => {
     try {
-        let animais = await Animal.findAll({ include: [{ all: true }] })
+        if(limit > 100){
+            limit = 100
+        }
+
+        let animais = await Animal.findAll(
+            { include: [{ all: true }], limit: limit, offset: offset, order: [['id', order]] }
+        )
 
         if (animais.length === 0) {
             return { err: `Nenhum animal encontrado` }
         }
 
-        return animais
+        let quantidadeAnimais = await Animal.count()
+        let proximo = false
+
+        if (quantidadeAnimais > (Number(offset) + animais.length)) {
+            proximo = true
+        }
+
+        return { obj: animais, proximo: proximo, offset: offset, total: quantidadeAnimais }
     }
     catch (err) {
         return { err: `Erro ao buscar animais: ${err}` }
@@ -82,7 +95,7 @@ service.buscarPorId = async (_id) => {
         let animal = await Animal.findOne({ include: [{ all: true }] }, {
             where: {
                 id: _id
-            },
+            }
         })
 
         if (!animal) {
@@ -95,7 +108,7 @@ service.buscarPorId = async (_id) => {
     }
 }
 
-service.salvarAnimal = async (_animal) => {
+service.salvarAnimal = async (_animal, offset = 0, limit = 25, order = "ASC") => {
     let inconsistencias = await validar(_animal, 'criacao')
 
     if (inconsistencias) {
