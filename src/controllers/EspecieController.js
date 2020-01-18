@@ -7,13 +7,21 @@ let router = express.Router()
 router.use(authMiddleware)
 
 router.get('/', async (req, res) => {
-    let especies = await especieService.buscarTodos()
+    let especies = await especieService.buscarTodos(req.query.offset, req.query.limit, req.query.order)
 
     if (especies.err) {
         res.send(new ResponseBuilder(false, especies.err))
     }
 
-    res.send(new ResponseBuilder(true, "Especies buscadas com sucesso", especies))
+    res.send(new ResponseBuilder(
+        true,
+        'Espécies encontradas com sucesso',
+        especies.obj,
+        especies.proximo,
+        especies.offset,
+        req.query.limit,
+        especies.total
+    ))
 })
 
 router.get('/:id', async (req, res) => {

@@ -7,13 +7,21 @@ let router = express.Router()
 router.use(authMiddleware)
 
 router.get('/', async (req, res) => {
-    let tipoContratos = await tipoContratoService.buscarTodos()
+    let tipoContratos = await tipoContratoService.buscarTodos(req.query.offset, req.query.limit, req.query.order)
 
     if (tipoContratos.err) {
         res.send(new ResponseBuilder(false, tipoContratos.err))
     }
 
-    res.send(new ResponseBuilder(true, 'Tipos de contrato encontrados com sucesso', tipoContratos))
+    res.send(new ResponseBuilder(
+        true,
+        'Tipos de contrato encontrados com sucesso',
+        tipoContratos.obj,
+        tipoContratos.proximo,
+        tipoContratos.offset,
+        req.query.limit,
+        tipoContratos.total
+    ))
 })
 
 router.get('/:id', async (req, res) => {

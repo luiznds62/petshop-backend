@@ -19,15 +19,22 @@ async function validar(_raca, _acao) {
     }
 }
 
-service.buscarTodos = async () => {
+service.buscarTodos = async (offset = 0, limit = 25, order = "ASC") => {
     try {
-        let racas = await Raca.findAll()
+        let racas = await Raca.findAll({ limit: limit, offset: offset, order: [['id',order]]})
 
         if (racas.length === 0) {
             return { err: `Nenhuma raça encontrado` }
         }
 
-        return racas
+        let quantidade = await Raca.count()
+        let proximo = false
+
+        if (quantidade > (Number(offset) + racas.length)) {
+            proximo = true
+        }
+
+        return { obj: racas, proximo: proximo, offset: offset, total: quantidade }
     }
     catch (err) {
         return { err: `Erro ao buscar raças: ${err}` }

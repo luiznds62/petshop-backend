@@ -7,13 +7,21 @@ let router = express.Router()
 router.use(authMiddleware)
 
 router.get('/', async (req, res) => {
-    let servicos = await servicoService.buscarTodos()
+    let servicos = await servicoService.buscarTodos(req.query.offset, req.query.limit, req.query.order)
 
     if (servicos.err) {
         res.send(new ResponseBuilder(false, servicos.err))
     }
 
-    res.send(new ResponseBuilder(true, 'Serviços encontrados com sucesso', servicos))
+    res.send(new ResponseBuilder(
+        true,
+        'Serviços encontrados com sucesso',
+        servicos.obj,
+        servicos.proximo,
+        servicos.offset,
+        req.query.limit,
+        servicos.total
+    ))
 })
 
 router.get('/:id', async (req, res) => {

@@ -33,15 +33,22 @@ async function validar(_estado) {
     }
 }
 
-service.buscarTodos = async () => {
+service.buscarTodos = async (offset = 0, limit = 25, order = "ASC") => {
     try {
-        let estados = await Estado.findAll()
+        let estados = await Estado.findAll({ limit: limit, offset: offset, order: [['id',order]]})
 
         if (estados.length === 0) {
             return { err: `Nenhum estado encontrado` }
         }
 
-        return estados
+        let quantidade = await Estado.count()
+        let proximo = false
+
+        if (quantidade > (Number(offset) + estados.length)) {
+            proximo = true
+        }
+
+        return { obj: estados, proximo: proximo, offset: offset, total: quantidade }
     }
     catch (err) {
         return { err: `Erro ao buscar estados: ${err}` }

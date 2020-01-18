@@ -38,15 +38,22 @@ async function validar(_pessoa, _acao) {
     }
 }
 
-service.buscarTodos = async () => {
+service.buscarTodos = async (offset = 0, limit = 25, order = "ASC") => {
     try {
-        let pessoas = await Pessoa.findAll({ include: [{ all: true }] })
+        let pessoas = await Pessoa.findAll({ limit: limit, offset: offset, order: [['id',order]]})
 
         if (pessoas.length === 0) {
             return { err: `Nenhuma pessoa encontrado` }
         }
 
-        return pessoas
+        let quantidade = await Pessoa.count()
+        let proximo = false
+
+        if (quantidade > (Number(offset) + pessoas.length)) {
+            proximo = true
+        }
+
+        return { obj: pessoas, proximo: proximo, offset: offset, total: quantidade }
     }
     catch (err) {
         return { err: `Erro ao buscar pessoas: ${err}` }

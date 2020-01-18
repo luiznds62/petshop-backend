@@ -3,38 +3,53 @@ import Cidade from '../models/Cidade'
 
 let service = {}
 
-service.buscarTodos = async () => {
+service.buscarTodos = async (offset = 0, limit = 25, order = "ASC") => {
     try {
-        let bairros = await Bairro.findAll({ include: [{ all: true }] })
+        let bairros = await Bairro.findAll(
+            { include: [{ all: true }], limit: limit, offset: offset, order: [['id', order]] }
+        )
 
         if (bairros.length === 0) {
             return { err: `Nenhuma Bairro encontrada` }
         }
 
-        return bairros
+
+        let quantidadeBairros = await Bairro.count()
+        let proximo = false
+
+        if (quantidadeBairros > (Number(offset) + bairros.length)) {
+            proximo = true
+        }
+
+        return { obj: bairros, proximo: proximo, offset: offset, total: quantidadeBairros }
     }
     catch (err) {
         return { err: `Erro ao buscar Bairros: ${err}` }
     }
 }
 
-service.buscarPorcidadeId = async (_cidadeId) => {
+service.buscarPorCidadeId = async (_cidadeId, offset = 0, limit = 25, order = "ASC") => {
     if (!_cidadeId) {
         return "ID da Cidade não informada"
     } else {
-        let cidade = await Cidade.findOne({ include: [{ all: true }] }, {
+        let cidade = await Cidade.findOne({
             where: {
                 id: _cidadeId
             }
         })
 
         if (!cidade) {
-            return { err: `Cidade com ID: ${_cidadeId} não encontrada` }
+            return { err: `Cidade não encontrada` }
         }
     }
 
     try {
-        let bairros = await Bairro.findAll({ include: [{ all: true }] }, {
+        let bairros = await Bairro.findAll({
+            include: [{ all: true }],
+            offset: offset,
+            limit: limit,
+            order: [['id', order]], 
+        }, {
             where: {
                 cidadeId: _cidadeId
             }
@@ -44,7 +59,14 @@ service.buscarPorcidadeId = async (_cidadeId) => {
             return { err: `Nenhum bairro encontrado para o cidadeId: ${_cidadeId}` }
         }
 
-        return bairros
+        let quantidadeBairros = await Bairro.count()
+        let proximo = false
+
+        if (quantidadeBairros > (Number(offset) + bairros.length)) {
+            proximo = true
+        }
+
+        return { obj: bairros, proximo: proximo, offset: offset, total: quantidadeBairros }
     } catch (err) {
         return { err: `Erro ao buscar cidade por ID: ${err}` }
     }

@@ -13,7 +13,14 @@ router.get('/', async (req, res) => {
             res.send(new ResponseBuilder(false, animais.err))
         }
 
-        res.send(new ResponseBuilder(true, "Animais buscados com sucesso", animais.obj, animais.proximo, animais.offset, req.query.limit, animais.total))
+        res.send(new ResponseBuilder(
+            true,
+            "Animais buscados com sucesso",
+            animais.obj,
+            animais.proximo,
+            animais.offset,
+            req.query.limit,
+            animais.total))
     } catch (error) {
         res.send(new ResponseBuilder(false, 'Erro interno do servidor'))
     }

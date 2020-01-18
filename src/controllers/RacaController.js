@@ -7,13 +7,21 @@ let router = express.Router()
 router.use(authMiddleware)
 
 router.get('/', async (req, res) => {
-    let racas = await racaService.buscarTodos()
+    let racas = await racaService.buscarTodos(req.query.offset, req.query.limit, req.query.order)
 
     if (racas.err) {
         res.send(new ResponseBuilder(false, racas.err))
     }
 
-    res.send(new ResponseBuilder(true, "Raças buscadas com sucesso", racas))
+    res.send(new ResponseBuilder(
+        true,
+        'Raças encontradas com sucesso',
+        racas.obj,
+        racas.proximo,
+        racas.offset,
+        req.query.limit,
+        racas.total
+    ))
 })
 
 router.get('/:id', async (req, res) => {

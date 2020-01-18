@@ -67,15 +67,22 @@ async function validar(_cliente, _acao) {
     }
 }
 
-service.buscarTodos = async () => {
+service.buscarTodos = async (offset = 0, limit = 25, order = "ASC") => {
     try {
-        let clientes = await Cliente.findAll({ include: [{ all: true }] })
+        let clientes = await Cliente.findAll({ include: [{ all: true }], limit: limit, offset: offset, order: [['id', order]] })
 
         if (clientes.length === 0) {
             return { err: `Nenhum cliente encontrado` }
         }
 
-        return clientes
+        let quantidade = await Cliente.count()
+        let proximo = false
+
+        if (quantidade > (Number(offset) + clientes.length)) {
+            proximo = true
+        }
+
+        return { obj: clientes, proximo: proximo, offset: offset, total: quantidade }
     }
     catch (err) {
         return { err: `Erro ao buscar clientes: ${err}` }

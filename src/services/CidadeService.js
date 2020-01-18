@@ -23,15 +23,22 @@ async function validar(_cidade) {
     }
 }
 
-service.buscarTodos = async () => {
+service.buscarTodos = async (offset = 0, limit = 25, order = "ASC") => {
     try {
-        let cidades = await Cidade.findAll({ include: [{ all: true }] })
+        let cidades = await Cidade.findAll({ include: [{ all: true }], limit: limit, offset: offset, order: [['id', order]] })
 
         if (cidades.length === 0) {
             return { err: `Nenhuma cidade encontrada` }
         }
 
-        return cidades
+        let quantidade = await Cidade.count()
+        let proximo = false
+
+        if (quantidade > (Number(offset) + cidades.length)) {
+            proximo = true
+        }
+
+        return { obj: cidades, proximo: proximo, offset: offset, total: quantidade }
     }
     catch (err) {
         return { err: `Erro ao buscar cidades: ${err}` }

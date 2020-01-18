@@ -8,15 +8,22 @@ async function validar(_tipoContrato, _acao) {
     }
 }
 
-service.buscarTodos = async () => {
+service.buscarTodos = async (offset = 0, limit = 25, order = "ASC") => {
     try {
-        let tipoContratos = await TipoContrato.findAll()
+        let tipoContratos = await TipoContrato.findAll({ limit: limit, offset: offset, order: [['id',order]]})
 
         if (tipoContratos.length === 0) {
             return { err: `Nenhum tipo de contrato encontrado` }
         }
 
-        return tipoContratos
+        let quantidade = await TipoContrato.count()
+        let proximo = false
+
+        if (quantidade > (Number(offset) + tipoContratos.length)) {
+            proximo = true
+        }
+
+        return { obj: tipoContratos, proximo: proximo, offset: offset, total: quantidade }
     }
     catch (err) {
         return { err: `Erro ao buscar tipo de contratos: ${err}` }

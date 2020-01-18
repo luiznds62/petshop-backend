@@ -4,15 +4,22 @@ import Empresa from '../models/Empresa'
 
 let service = {}
 
-service.buscarTodos = async (req, res) => {
+service.buscarTodos = async (offset = 0, limit = 25, order = "ASC") => {
     try {
-        let usuarioHasEmpresas = await UsuarioHasEmpresa.findAll()
+        let usuarioHasEmpresas = await UsuarioHasEmpresa.findAll({ include: [{ all: true }], offset: offset, limit: limit, order: [['id', order]] })
 
         if (usuarioHasEmpresas.length === 0) {
             return { err: `Nenhuma usuário vinculado a empresa encontrado` }
         }
 
-        return usuarioHasEmpresas
+        let qtd = await UsuarioHasEmpresa.count()
+        let proximo = false
+
+        if (qtd > (Number(offset) + usuarioHasEmpresas.length)) {
+            proximo = true
+        }
+
+        return { obj: usuarioHasEmpresas, proximo: proximo, offset: offset, total: qtd }
     }
     catch (err) {
         return { err: `Erro ao buscar Usuário vinculado a Empresa: ${err}` }
@@ -61,7 +68,7 @@ service.salvarUsuarioHasEmpresa = async (_usuarioHasEmpresa) => {
     }
 }
 
-service.vincularUsuarioDeEmpresa = async (_empresaId,_usuarioId) => {
+service.vincularUsuarioDeEmpresa = async (_empresaId, _usuarioId) => {
     if (!_usuarioId) {
         return { err: "ID do usuário não informado" }
     } else {
@@ -93,7 +100,7 @@ service.vincularUsuarioDeEmpresa = async (_empresaId,_usuarioId) => {
     try {
         let usuarioHasEmpresaAtualizar = await UsuarioHasEmpresa.update({
             habilitado: true
-        },{
+        }, {
             where: {
                 usuarioId: _usuarioId,
                 empresaId: _empresaId
@@ -106,7 +113,7 @@ service.vincularUsuarioDeEmpresa = async (_empresaId,_usuarioId) => {
     }
 }
 
-service.desvincularUsuarioDeEmpresa = async (_empresaId,_usuarioId) => {
+service.desvincularUsuarioDeEmpresa = async (_empresaId, _usuarioId) => {
     if (!_usuarioId) {
         return { err: "ID do usuário não informado" }
     } else {
@@ -138,7 +145,7 @@ service.desvincularUsuarioDeEmpresa = async (_empresaId,_usuarioId) => {
     try {
         let usuarioHasEmpresaAtualizar = await UsuarioHasEmpresa.update({
             habilitado: false
-        },{
+        }, {
             where: {
                 usuarioId: _usuarioId,
                 empresaId: _empresaId

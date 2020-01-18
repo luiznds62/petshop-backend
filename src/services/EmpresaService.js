@@ -1,5 +1,6 @@
 import Empresa from '../models/Empresa'
 import validadorCpfCnpj from '../common/ValidadorCpfCnpj'
+import Endereco from '../models/Endereco'
 let service = {}
 
 async function validar(_empresa, _operacao) {
@@ -69,15 +70,22 @@ async function validar(_empresa, _operacao) {
     }
 }
 
-service.buscarTodos = async () => {
+service.buscarTodos = async (offset = 0, limit = 25, order = "ASC") => {
     try {
-        let empresas = await Empresa.findAll({ include: [{ all: true }] })
+        let empresas = await Empresa.findAll({ include: [{ all: true }], offset: offset, limit: limit, order: [['id', order]] })
 
         if (empresas.length === 0) {
             return { err: `Nenhuma empresa encontrada` }
         }
+        
+        let qtd = await Empresa.count()
+        let proximo = false
 
-        return empresas
+        if (qtd > (Number(offset) + empresas.length)) {
+            proximo = true
+        }
+
+        return { obj: empresas, proximo: proximo, offset: offset, total: qtd }
     }
     catch (err) {
         return { err: `Erro ao buscar empresas: ${err}` }

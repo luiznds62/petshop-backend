@@ -19,15 +19,22 @@ async function validar(_especie, _acao) {
     }
 }
 
-service.buscarTodos = async () => {
+service.buscarTodos = async (offset = 0, limit = 25, order = "ASC") => {
     try {
-        let especies = await Especie.findAll()
+        let especies = await Especie.findAll({ limit: limit, offset: offset, order: [['id',order]]})
 
         if (especies.length === 0) {
             return { err: `Nenhuma especie encontrado` }
         }
 
-        return especies
+        let quantidade = await Especie.count()
+        let proximo = false
+
+        if (quantidade > (Number(offset) + especies.length)) {
+            proximo = true
+        }
+
+        return { obj: especies, proximo: proximo, offset: offset, total: quantidade }
     }
     catch (err) {
         return { err: `Erro ao buscar especies: ${err}` }

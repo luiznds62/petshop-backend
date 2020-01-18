@@ -7,13 +7,21 @@ let router = express.Router()
 router.use(authMiddleware)
 
 router.get('/', async (req, res) => {
-    let enderecos = await enderecoService.buscarTodos()
+    let enderecos = await enderecoService.buscarTodos(req.query.offset, req.query.limit, req.query.order)
 
     if (enderecos.err) {
         res.send(new ResponseBuilder(false, enderecos.err))
     }
 
-    res.send(new ResponseBuilder(true, 'Endereços encontrados com sucesso', enderecos))
+    res.send(new ResponseBuilder(
+        true,
+        'Endereços encontrados com sucesso',
+        enderecos.obj,
+        enderecos.proximo,
+        enderecos.offset,
+        req.query.limit,
+        enderecos.total
+    ))
 })
 
 router.get('/:id', async (req, res) => {

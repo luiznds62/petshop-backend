@@ -7,13 +7,21 @@ let router = express.Router()
 router.use(authMiddleware)
 
 router.get('/', async (req, res) => {
-    let cidades = await cidadeService.buscarTodos()
+    let cidades = await cidadeService.buscarTodos(req.query.offset, req.query.limit, req.query.order)
 
     if (cidades.err) {
         res.send(new ResponseBuilder(false, cidades.err))
     }
 
-    res.send(new ResponseBuilder(true, 'Cidades encontradas com sucesso', cidades))
+    res.send(new ResponseBuilder(
+        true,
+        'Cidades encontradas com sucesso',
+        cidades.obj,
+        cidades.proximo,
+        cidades.offset,
+        req.query.limit,
+        cidades.total
+    ))
 })
 
 router.get('/:id', async (req, res) => {

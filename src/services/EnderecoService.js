@@ -77,15 +77,24 @@ service.buscarPorId = async (_id) => {
     }
 }
 
-service.buscarTodos = async (req, res) => {
+service.buscarTodos = async (offset = 0, limit = 25, order = "ASC") => {
     try {
-        let enderecos = await Endereco.findAll({ include: [{ all: true }] })
+        let enderecos = await Endereco.findAll(
+            { include: [{ all: true }], limit: limit, offset: offset, order: [['id', order]] }
+        )
 
         if (enderecos.length === 0) {
             return { err: `Nenhum Endereco encontrada` }
         }
 
-        return enderecos
+        let quantidadeEnderecos = await Endereco.count()
+        let proximo = false
+
+        if (quantidadeEnderecos > (Number(offset) + enderecos.length)) {
+            proximo = true
+        }
+
+        return { obj: enderecos, proximo: proximo, offset: offset, total: quantidadeEnderecos }
     }
     catch (err) {
         return { err: `Erro ao buscar Enderecos: ${err}` }

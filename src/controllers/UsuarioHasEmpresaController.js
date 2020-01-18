@@ -4,13 +4,21 @@ import ResponseBuilder from "../common/ResponseBuilder"
 const router = express.Router()
 
 router.get('/', async (req, res) => {
-    var usuariosHasEmpresa = await usuarioHasEmpresaService.buscarTodos()
+    var usuariosHasEmpresa = await usuarioHasEmpresaService.buscarTodos(req.query.offset, req.query.limit, req.query.order)
 
     if (usuariosHasEmpresa.err) {
         res.send(new ResponseBuilder(false, usuariosHasEmpresa.err, []))
     }
 
-    res.send(new ResponseBuilder(true, 'Usuários vinculados a Empresa buscados com sucesso', usuariosHasEmpresa))
+    res.send(new ResponseBuilder(
+        true,
+        'Usuários encontrados com sucesso',
+        usuariosHasEmpresa.obj,
+        usuariosHasEmpresa.proximo,
+        usuariosHasEmpresa.offset,
+        req.query.limit,
+        usuariosHasEmpresa.total
+    ))
 })
 
 router.get('/usuario/:idUsuario', async (req, res) => {

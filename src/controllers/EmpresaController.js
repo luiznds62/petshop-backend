@@ -7,13 +7,21 @@ let router = express.Router()
 router.use(authMiddleware)
 
 router.get('/', async (req, res) => {
-    let empresas = await empresaService.buscarTodos()
+    let empresas = await empresaService.buscarTodos(req.query.offset, req.query.limit, req.query.order)
 
     if (empresas.err) {
         res.send(new ResponseBuilder(false, empresas.err))
     }
 
-    res.send(new ResponseBuilder(true, 'Empresas encontradas com sucesso', empresas))
+    res.send(new ResponseBuilder(
+        true,
+        'Empresas encontradas com sucesso',
+        empresas.obj,
+        empresas.proximo,
+        empresas.offset,
+        req.query.limit,
+        empresas.total
+    ))
 })
 
 router.get('/:id', async (req, res) => {

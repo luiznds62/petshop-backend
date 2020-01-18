@@ -7,13 +7,21 @@ let router = express.Router()
 router.use(authMiddleware)
 
 router.get('/', async (req, res) => {
-    let estados = await estadoService.buscarTodos()
+    let estados = await estadoService.buscarTodos(req.query.offset, req.query.limit, req.query.order)
 
     if (estados.err) {
         res.send(new ResponseBuilder(false, estados.err))
     }
     
-    res.send(new ResponseBuilder(true, 'Estados encontrados com sucesso', estados))
+    res.send(new ResponseBuilder(
+        true,
+        'Estados encontrados com sucesso',
+        estados.obj,
+        estados.proximo,
+        estados.offset,
+        req.query.limit,
+        estados.total
+    ))
 })
 
 router.get('/:uf', async (req, res) => {

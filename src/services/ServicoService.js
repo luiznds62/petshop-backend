@@ -24,15 +24,22 @@ async function validar(_servico, _acao) {
     }
 }
 
-service.buscarTodos = async () => {
+service.buscarTodos = async (offset = 0, limit = 25, order = "ASC") => {
     try {
-        let servicos = await Servico.findAll()
+        let servicos = await Servico.findAll({ limit: limit, offset: offset, order: [['id',order]]})
 
         if (servicos.length === 0) {
             return { err: `Nenhum serviço encontrado` }
         }
 
-        return servicos
+        let quantidade = await Servico.count()
+        let proximo = false
+
+        if (quantidade > (Number(offset) + servicos.length)) {
+            proximo = true
+        }
+
+        return { obj: servicos, proximo: proximo, offset: offset, total: quantidade }
     }
     catch (err) {
         return { err: `Erro ao buscar serviços: ${err}` }
