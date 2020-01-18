@@ -53,8 +53,30 @@ async function validar(_animal, _acao) {
         }
     }
 
+    if (!_animal.genero) {
+        return "Genero não informado"
+    } else {
+        if (_animal.genero != "M" && _animal.genero != "F") {
+            return "Genero não existente"
+        }
+    }
+
+    if (!_animal.porte) {
+        return "Porte não informado"
+    } else {
+        if (!['Mini/Anão', 'Pequeno', 'Médio', 'Grande', 'Gigante'].includes(_animal.porte)) {
+            return "Porte inválido"
+        }
+    }
+
+    if(_animal.temperamento){
+        if(!['Calmo','Agressivo'].includes(_animal.temperamento)){
+            return "Temperamento inválido"
+        }
+    }
+
     if (_animal.dataNascimento) {
-        if(!validadorDatas.validarData(_animal.dataNascimento)){
+        if (!validadorDatas.validarData(_animal.dataNascimento)) {
             return "Data inválida"
         }
     }
@@ -62,7 +84,7 @@ async function validar(_animal, _acao) {
 
 service.buscarTodos = async (offset = 0, limit = 25, order = "ASC") => {
     try {
-        if(limit > 100){
+        if (limit > 100) {
             limit = 100
         }
 

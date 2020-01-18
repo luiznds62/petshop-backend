@@ -17,6 +17,24 @@ Animal.init({
     cor: {
         type: Sequelize.STRING
     },
+    genero: {
+        type: Sequelize.ENUM,
+        values: ['M', 'F'],
+        allowNull: false
+    },
+    porte: {
+        type: Sequelize.ENUM,
+        values: ['Mini/Anão','Pequeno','Médio','Grande','Gigante'],
+        allowNull: false
+    },
+    peso: {
+        type: Sequelize.DOUBLE
+    },
+    temperamento: {
+        type: Sequelize.ENUM,
+        values: ['Calmo','Agressivo'],
+        defaultValue: 'Calmo'
+    },
     clienteId: {
         type: Sequelize.BIGINT,
         references: {
