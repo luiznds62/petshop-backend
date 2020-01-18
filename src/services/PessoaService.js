@@ -30,7 +30,9 @@ async function validar(_pessoa, _acao) {
     if (!_pessoa.dataNascimento) {
         return "Data de nascimento não informada"
     } else {
-        validadorDatas.validarData(_pessoa.dataNascimento)
+        if(!validadorDatas.validarData(_pessoa.dataNascimento)){
+            return "Data inválida"
+        }
     }
 
     if (!_pessoa.genero) {

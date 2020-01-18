@@ -12,7 +12,7 @@ TipoContrato.init({
     }
 }, {
     sequelize: db,
-    modelName: 'tipocontrato'
+    modelName: 'tipoContrato'
 });
 
 export default TipoContrato

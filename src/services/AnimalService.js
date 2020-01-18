@@ -54,7 +54,9 @@ async function validar(_animal, _acao) {
     }
 
     if (_animal.dataNascimento) {
-        validadorDatas.validarData(_animal.dataNascimento)
+        if(!validadorDatas.validarData(_animal.dataNascimento)){
+            return "Data inválida"
+        }
     }
 }
 
