@@ -22,7 +22,15 @@ Agendamento.init({
     },
     dia: {
         type: Sequelize.ENUM,
-        values: ['Segunda','Terça','Quarta','Quinta','Sexta','Sabado','Domingo'],
+        values: ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sabado', 'Domingo'],
+        allowNull: false
+    },
+    duracao: {
+        type: Sequelize.DOUBLE,
+        allowNull: false
+    },
+    horarioInicio: {
+        type: Sequelize.STRING,
         allowNull: false
     },
     observacao: {
