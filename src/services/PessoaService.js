@@ -20,7 +20,7 @@ async function validar(_pessoa, _acao) {
 
         if (pessoaDuplicadada && _acao === 'criacao') {
             return "CPF já cadastrado"
-        } else if(_acao != 'atualizacao') {
+        } else if (_acao != 'atualizacao') {
             if (!validadorCpfCnpj.validarCPF(_pessoa.cpf)) {
                 return "CPF inválido"
             }
@@ -40,7 +40,7 @@ async function validar(_pessoa, _acao) {
 
 service.buscarTodos = async () => {
     try {
-        let pessoas = await Pessoa.findAll()
+        let pessoas = await Pessoa.findAll({ include: [{ all: true }] })
 
         if (pessoas.length === 0) {
             return { err: `Nenhuma pessoa encontrado` }
@@ -59,14 +59,14 @@ service.buscarPorId = async (_id) => {
     }
 
     try {
-        let pessoa = await Pessoa.findOne({
+        let pessoa = await Pessoa.findOne({ include: [{ all: true }] }, {
             where: {
                 id: _id
             }
         })
 
         if (!pessoa) {
-            return { err: `Pessoa com ID: ${_id} não encontrada` }
+            return { err: `Pessoa não encontrada` }
         }
 
         return pessoa

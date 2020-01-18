@@ -30,7 +30,7 @@ Empresa.init({
         type: Sequelize.DATE,
         defaultValue: Sequelize.NOW
     },
-    idEndereco: {
+    enderecoId: {
         type: Sequelize.BIGINT,
         references: {
             model: Endereco,
@@ -41,5 +41,7 @@ Empresa.init({
     sequelize: db,
     modelName: 'empresa'
 });
+
+Empresa.belongsTo(Endereco)
 
 export default Empresa

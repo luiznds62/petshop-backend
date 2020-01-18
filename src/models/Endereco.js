@@ -20,7 +20,7 @@ Endereco.init({
     cep: {
         type: Sequelize.INTEGER
     },
-    idCidade: {
+    cidadeId: {
         type: Sequelize.BIGINT,
         references: {
             model: Cidade,
@@ -28,7 +28,7 @@ Endereco.init({
         },
         allowNull: false
     },
-    idBairro: {
+    bairroId: {
         type: Sequelize.BIGINT,
         references: {
             model: Bairro,
@@ -40,5 +40,8 @@ Endereco.init({
     sequelize: db,
     modelName: 'endereco'
 });
+
+Endereco.belongsTo(Cidade)
+Endereco.belongsTo(Bairro)
 
 export default Endereco

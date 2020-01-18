@@ -8,12 +8,12 @@ async function validar(_cidade) {
         return "Nome não informado"
     }
 
-    if (!_cidade.idEstado) {
+    if (!_cidade.estadoId) {
         return "Estado não informado"
     } else {
         let estadoExiste = await Estado.findOne({
             where: {
-                id: _cidade.idEstado
+                id: _cidade.estadoId
             }
         })
 
@@ -25,7 +25,7 @@ async function validar(_cidade) {
 
 service.buscarTodos = async () => {
     try {
-        let cidades = await Cidade.findAll()
+        let cidades = await Cidade.findAll({ include: [{ all: true }] })
 
         if (cidades.length === 0) {
             return { err: `Nenhuma cidade encontrada` }
@@ -44,7 +44,7 @@ service.buscarPorId = async (_id) => {
     }
 
     try {
-        let cidade = await Cidade.findOne({
+        let cidade = await Cidade.findOne({ include: [{ all: true }] }, {
             where: {
                 id: _id
             }
@@ -79,10 +79,10 @@ service.buscarPorUFNome = async (_uf, _nome) => {
         })
 
         if (estado) {
-            let cidade = await Cidade.findOne({
+            let cidade = await Cidade.findOne({ include: [{ all: true }] }, {
                 where: {
                     nome: _nome,
-                    idEstado: estado.id
+                    estadoId: estado.id
                 }
             })
 

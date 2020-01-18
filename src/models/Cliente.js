@@ -6,14 +6,14 @@ import Endereco from './Endereco';
 
 class Cliente extends Sequelize.Model { }
 Cliente.init({
-    idPessoa: {
+    pessoaId: {
         type: Sequelize.BIGINT,
         references: {
             model: Pessoa,
             key: 'id'
         }
     },
-    idEndereco: {
+    enderecoId: {
         type: Sequelize.BIGINT,
         references: {
             model: Endereco,
@@ -32,5 +32,8 @@ Cliente.init({
     sequelize: db,
     modelName: 'cliente'
 });
+
+Cliente.belongsTo(Pessoa)
+Cliente.belongsTo(Endereco)
 
 export default Cliente

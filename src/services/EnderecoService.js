@@ -18,13 +18,13 @@ async function validar(_endereco) {
         }
     }
 
-    if (!_endereco.idCidade) {
+    if (!_endereco.cidadeId) {
         return "Cidade não informada"
     } else {
         try {
             let cidade = await Cidade.findOne({
                 where: {
-                    id: _endereco.idCidade
+                    id: _endereco.cidadeId
                 }
             })
 
@@ -36,13 +36,13 @@ async function validar(_endereco) {
         }
     }
 
-    if (!_endereco.idBairro) {
+    if (!_endereco.bairroId) {
         return "Bairro não informado"
     } else {
         try {
             let bairro = await Bairro.findOne({
                 where: {
-                    id: _endereco.idBairro
+                    id: _endereco.bairroId
                 }
             })
 
@@ -61,14 +61,14 @@ service.buscarPorId = async (_id) => {
     }
 
     try {
-        let endereco = await Endereco.findOne({
+        let endereco = await Endereco.findOne({ include: [{ all: true }] }, {
             where: {
                 id: _id
             }
         })
 
         if (!endereco) {
-            return { err: `Endereço não encontrado para o ID: ${_id}` }
+            return { err: `Endereço não encontrado` }
         }
 
         return endereco
@@ -79,7 +79,7 @@ service.buscarPorId = async (_id) => {
 
 service.buscarTodos = async (req, res) => {
     try {
-        let enderecos = await Endereco.findAll()
+        let enderecos = await Endereco.findAll({ include: [{ all: true }] })
 
         if (enderecos.length === 0) {
             return { err: `Nenhum Endereco encontrada` }
@@ -105,6 +105,34 @@ service.salvarEndereco = async (_endereco) => {
         return enderecoNovo
     } catch (err) {
         return { err: err }
+    }
+}
+
+service.deletarEndereco = async (_id) => {
+    if (!_id) {
+        return { err: "ID não informado" }
+    } else {
+        let enderecoDeletar = await Endereco.findOne({
+            where: {
+                id: _id
+            }
+        })
+
+        if (!enderecoDeletar) {
+            return { err: `Endereço não encontrado` }
+        }
+    }
+
+    try {
+        let enderecoDeletado = await Endereco.destroy({
+            where: {
+                id: _id
+            }
+        })
+
+        return enderecoDeletado
+    } catch (err) {
+        return { err: `Erro ao deletar endereço: ${err}` }
     }
 }
 

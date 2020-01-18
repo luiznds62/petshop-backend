@@ -19,6 +19,8 @@ import usuariohasempresa from './src/controllers/UsuarioHasEmpresaController'
 import especie from './src/controllers/EspecieController'
 import raca from './src/controllers/RacaController'
 import animal from './src/controllers/AnimalController'
+import servico from './src/controllers/ServicoController'
+import tipocontrato from './src/controllers/TipoContratoController'
 
 let port = process.env.PORT || 3000
 let app = express()
@@ -48,6 +50,8 @@ app.use('/cliente', cliente)
 app.use('/especie', especie)
 app.use('/raca', raca)
 app.use('/animal', animal)
+app.use('/servico', servico)
+app.use('/tipocontrato', tipocontrato)
 
 app.get('/', (req, res) => {
     res.send("Endpoint inválido")

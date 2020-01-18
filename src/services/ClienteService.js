@@ -5,22 +5,22 @@ import Endereco from '../models/Endereco'
 let service = {}
 
 async function validar(_cliente, _acao) {
-    if (!_cliente.idPessoa) {
+    if (!_cliente.pessoaId) {
         return "Dados pessoais não informados"
     } else {
         let pessoa = await Pessoa.findOne({
             where: {
-                id: _cliente.idPessoa
+                id: _cliente.pessoaId
             }
         })
 
         if (!pessoa) {
             return "Dados pessoais não encontrados"
-        } else if(_acao === 'criacao'){
+        } else if (_acao === 'criacao') {
 
             let clienteJaExistente = await Cliente.findOne({
                 where: {
-                    idPessoa: _cliente.idPessoa
+                    pessoaId: _cliente.pessoaId
                 }
             })
 
@@ -30,12 +30,12 @@ async function validar(_cliente, _acao) {
         }
     }
 
-    if (!_cliente.idEndereco) {
+    if (!_cliente.enderecoId) {
         return "Endereço não informado"
     } else {
         let endereco = await Endereco.findOne({
             where: {
-                id: _cliente.idEndereco
+                id: _cliente.enderecoId
             }
         })
 
@@ -69,7 +69,7 @@ async function validar(_cliente, _acao) {
 
 service.buscarTodos = async () => {
     try {
-        let clientes = await Cliente.findAll()
+        let clientes = await Cliente.findAll({ include: [{ all: true }] })
 
         if (clientes.length === 0) {
             return { err: `Nenhum cliente encontrado` }
@@ -88,7 +88,7 @@ service.buscarPorId = async (_id) => {
     }
 
     try {
-        let cliente = await Cliente.findOne({
+        let cliente = await Cliente.findOne({ include: [{ all: true }] }, {
             where: {
                 id: _id
             }
@@ -129,7 +129,7 @@ service.atualizarCliente = async (_id, _cliente) => {
 
     try {
         let clienteAtualizado = await Cliente.update({
-            idEndereco: _cliente.idEndereco,
+            enderecoId: _cliente.enderecoId,
             telefonePrincipal: _cliente.telefonePrincipal,
             telefoneAlternativo: _cliente.telefoneAlternativo
         }, {

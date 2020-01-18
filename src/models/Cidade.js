@@ -8,7 +8,7 @@ Cidade.init({
         type: Sequelize.STRING,
         allowNull: false
     },
-    idEstado: {
+    estadoId: {
         type: Sequelize.BIGINT,
         references: {
             model: Estado,
@@ -20,5 +20,7 @@ Cidade.init({
     sequelize: db,
     modelName: 'cidade'
 });
+
+Cidade.belongsTo(Estado)
 
 export default Cidade

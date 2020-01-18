@@ -20,12 +20,12 @@ service.buscarTodos = async (req, res) => {
 }
 
 service.salvarUsuarioHasEmpresa = async (_usuarioHasEmpresa) => {
-    if (!_usuarioHasEmpresa.idUsuario) {
+    if (!_usuarioHasEmpresa.usuarioId) {
         return { err: "Usuário não informado" }
     } else {
         let usuario = await Usuario.findOne({
             where: {
-                id: _usuarioHasEmpresa.idUsuario
+                id: _usuarioHasEmpresa.usuarioId
             }
         })
 
@@ -34,12 +34,12 @@ service.salvarUsuarioHasEmpresa = async (_usuarioHasEmpresa) => {
         }
     }
 
-    if (!_usuarioHasEmpresa.idEmpresa) {
+    if (!_usuarioHasEmpresa.empresaId) {
         return { err: "Empresa não informada" }
     } else {
         let empresa = await Empresa.findOne({
             where: {
-                id: _usuarioHasEmpresa.idEmpresa
+                id: _usuarioHasEmpresa.empresaId
             }
         })
 
@@ -61,32 +61,32 @@ service.salvarUsuarioHasEmpresa = async (_usuarioHasEmpresa) => {
     }
 }
 
-service.vincularUsuarioDeEmpresa = async (_idEmpresa,_idUsuario) => {
-    if (!_idUsuario) {
+service.vincularUsuarioDeEmpresa = async (_empresaId,_usuarioId) => {
+    if (!_usuarioId) {
         return { err: "ID do usuário não informado" }
     } else {
         let usuario = await Usuario.findOne({
             where: {
-                id: _idUsuario
+                id: _usuarioId
             }
         })
 
         if (!usuario) {
-            return { err: `Usuário com ID: ${_idUsuario} não encontrado` }
+            return { err: `Usuário com ID: ${_usuarioId} não encontrado` }
         }
     }
 
-    if (!_idEmpresa) {
+    if (!_empresaId) {
         return { err: "Id da empresa não informado" }
     } else {
         let empresa = await Empresa.findOne({
             where: {
-                id: _idEmpresa
+                id: _empresaId
             }
         })
 
         if (!empresa) {
-            return { err: `Empresa com ID: ${_idEmpresa} não encontrada` }
+            return { err: `Empresa com ID: ${_empresaId} não encontrada` }
         }
     }
 
@@ -95,8 +95,8 @@ service.vincularUsuarioDeEmpresa = async (_idEmpresa,_idUsuario) => {
             habilitado: true
         },{
             where: {
-                idUsuario: _idUsuario,
-                idEmpresa: _idEmpresa
+                usuarioId: _usuarioId,
+                empresaId: _empresaId
             }
         })
 
@@ -106,32 +106,32 @@ service.vincularUsuarioDeEmpresa = async (_idEmpresa,_idUsuario) => {
     }
 }
 
-service.desvincularUsuarioDeEmpresa = async (_idEmpresa,_idUsuario) => {
-    if (!_idUsuario) {
+service.desvincularUsuarioDeEmpresa = async (_empresaId,_usuarioId) => {
+    if (!_usuarioId) {
         return { err: "ID do usuário não informado" }
     } else {
         let usuario = await Usuario.findOne({
             where: {
-                id: _idUsuario
+                id: _usuarioId
             }
         })
 
         if (!usuario) {
-            return { err: `Usuário com ID: ${_idUsuario} não encontrado` }
+            return { err: `Usuário com ID: ${_usuarioId} não encontrado` }
         }
     }
 
-    if (!_idEmpresa) {
+    if (!_empresaId) {
         return { err: "Id da empresa não informado" }
     } else {
         let empresa = await Empresa.findOne({
             where: {
-                id: _idEmpresa
+                id: _empresaId
             }
         })
 
         if (!empresa) {
-            return { err: `Empresa com ID: ${_idEmpresa} não encontrada` }
+            return { err: `Empresa com ID: ${_empresaId} não encontrada` }
         }
     }
 
@@ -140,8 +140,8 @@ service.desvincularUsuarioDeEmpresa = async (_idEmpresa,_idUsuario) => {
             habilitado: false
         },{
             where: {
-                idUsuario: _idUsuario,
-                idEmpresa: _idEmpresa
+                usuarioId: _usuarioId,
+                empresaId: _empresaId
             }
         })
 
@@ -151,20 +151,20 @@ service.desvincularUsuarioDeEmpresa = async (_idEmpresa,_idUsuario) => {
     }
 }
 
-service.buscarPorUsuario = async (_idUsuario) => {
-    if (!_idUsuario) {
+service.buscarPorUsuario = async (_usuarioId) => {
+    if (!_usuarioId) {
         return { err: "ID do Usuário não informado" }
     }
 
     try {
         let usuarioHasEmpresa = await UsuarioHasEmpresa.findOne({
             where: {
-                idUsuario: _idUsuario
+                usuarioId: _usuarioId
             }
         })
 
         if (!usuarioHasEmpresa) {
-            return { err: `Vinculo de Usuário com Empresa não encontrado para o idUsuario: ${_idUsuario}` }
+            return { err: `Vinculo de Usuário com Empresa não encontrado para o usuarioId: ${_usuarioId}` }
         }
 
         return usuarioHasEmpresa

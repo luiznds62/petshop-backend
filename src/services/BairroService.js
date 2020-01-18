@@ -5,7 +5,7 @@ let service = {}
 
 service.buscarTodos = async () => {
     try {
-        let bairros = await Bairro.findAll()
+        let bairros = await Bairro.findAll({ include: [{ all: true }] })
 
         if (bairros.length === 0) {
             return { err: `Nenhuma Bairro encontrada` }
@@ -18,30 +18,30 @@ service.buscarTodos = async () => {
     }
 }
 
-service.buscarPorIDCidade = async (_idCidade) => {
-    if (!_idCidade) {
+service.buscarPorcidadeId = async (_cidadeId) => {
+    if (!_cidadeId) {
         return "ID da Cidade não informada"
     } else {
-        let cidade = await Cidade.findOne({
+        let cidade = await Cidade.findOne({ include: [{ all: true }] }, {
             where: {
-                id: _idCidade
+                id: _cidadeId
             }
         })
 
         if (!cidade) {
-            return { err: `Cidade com ID: ${_idCidade} não encontrada` }
+            return { err: `Cidade com ID: ${_cidadeId} não encontrada` }
         }
     }
 
     try {
-        let bairros = await Bairro.findAll({
+        let bairros = await Bairro.findAll({ include: [{ all: true }] }, {
             where: {
-                idCidade: _idCidade
+                cidadeId: _cidadeId
             }
         })
 
         if (!bairros) {
-            return { err: `Nenhum bairro encontrado para o idCidade: ${_idCidade}` }
+            return { err: `Nenhum bairro encontrado para o cidadeId: ${_cidadeId}` }
         }
 
         return bairros
@@ -55,14 +55,14 @@ service.salvarBairro = async (_bairro) => {
         return { err: "Nome do Bairro não informado" }
     }
 
-    if (!_bairro.idCidade) {
+    if (!_bairro.cidadeId) {
         return { err: "Cidade do Bairro não informada" }
     }
 
     let bairro = await Bairro.findOne({
         where: {
             nome: _bairro.nome,
-            idCidade: _bairro.idCidade
+            cidadeId: _bairro.cidadeId
         }
     })
 

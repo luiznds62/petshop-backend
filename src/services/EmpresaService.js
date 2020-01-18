@@ -3,14 +3,14 @@ import validadorCpfCnpj from '../common/ValidadorCpfCnpj'
 let service = {}
 
 async function validar(_empresa, _operacao) {
-    if(_operacao === 'atualizar'){
+    if (_operacao === 'atualizar') {
         let empresaAtualizar = await Empresa.findOne({
             where: {
                 id: _empresa.id
             }
         })
 
-        if(empresaAtualizar === null){
+        if (empresaAtualizar === null) {
             return "Empresa não encontrada"
         }
     }
@@ -52,11 +52,11 @@ async function validar(_empresa, _operacao) {
         return "Nome Fantasia não informado"
     }
 
-    if (_empresa.idEndereco) {
+    if (_empresa.enderecoId) {
         try {
             let endereco = await Endereco.findOne({
                 where: {
-                    id: _empresa.idEndereco
+                    id: _empresa.enderecoId
                 }
             })
 
@@ -71,7 +71,7 @@ async function validar(_empresa, _operacao) {
 
 service.buscarTodos = async () => {
     try {
-        let empresas = await Empresa.findAll()
+        let empresas = await Empresa.findAll({ include: [{ all: true }] })
 
         if (empresas.length === 0) {
             return { err: `Nenhuma empresa encontrada` }
@@ -104,7 +104,7 @@ service.buscarPorId = async (_id) => {
     }
 
     try {
-        let empresa = await Empresa.findOne({
+        let empresa = await Empresa.findOne({ include: [{ all: true }] }, {
             where: {
                 id: _id
             }
@@ -132,8 +132,8 @@ service.atualizarEmpresa = async (_empresaAtualizar) => {
             razaoSocial: _empresaAtualizar.razaoSocial,
             nomeFantasia: _empresaAtualizar.nomeFantasia,
             cpfCnpj: _empresaAtualizar.cpfCnpj,
-            idEndereco: _empresaAtualizar.idEndereco
-        },{
+            enderecoId: _empresaAtualizar.enderecoId
+        }, {
             where: {
                 id: _empresaAtualizar.id
             }

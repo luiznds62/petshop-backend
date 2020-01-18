@@ -5,7 +5,7 @@ import Empresa from './Empresa'
 
 class UsuarioHasEmpresa extends Sequelize.Model { }
 UsuarioHasEmpresa.init({
-    idUsuario: {
+    usuarioId: {
         type: Sequelize.BIGINT,
         references: {
             model: Usuario,
@@ -13,7 +13,7 @@ UsuarioHasEmpresa.init({
         },
         allowNull: false
     },
-    idEmpresa: {
+    empresaId: {
         type: Sequelize.BIGINT,
         references: {
             model: Empresa,
@@ -35,5 +35,8 @@ UsuarioHasEmpresa.init({
     sequelize: db,
     modelName: 'usuariohasempresa'
 });
+
+UsuarioHasEmpresa.belongsTo(Usuario)
+UsuarioHasEmpresa.belongsTo(Empresa)
 
 export default UsuarioHasEmpresa

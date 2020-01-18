@@ -8,7 +8,7 @@ Bairro.init({
         type: Sequelize.STRING,
         allowNull: false
     },
-    idCidade: {
+    cidadeId: {
         type: Sequelize.BIGINT,
         references: {
             model: Cidade,
@@ -20,5 +20,7 @@ Bairro.init({
     sequelize: db,
     modelName: 'bairro'
 });
+
+Bairro.belongsTo(Cidade)
 
 export default Bairro

@@ -36,4 +36,14 @@ router.post('/', async (req, res) => {
     res.send(new ResponseBuilder(true, 'Endereco salvo com sucesso', endereco))
 })
 
+router.delete('/:id', async (req, res) => {
+    let endereco = await enderecoService.deletarEndereco(req.params.id)
+
+    if (endereco.err) {
+        res.send(new ResponseBuilder(false, endereco.err))
+    }
+
+    res.send(new ResponseBuilder(true, "Endereço deletado com sucesso", endereco))
+})
+
 export default router

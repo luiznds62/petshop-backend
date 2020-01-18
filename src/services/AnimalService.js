@@ -11,26 +11,26 @@ async function validar(_animal, _acao) {
         return "Nome não informado"
     }
 
-    if(!_animal.idCliente){
+    if (!_animal.clienteId) {
         return "Cliente responsável não informado"
-    }else{
+    } else {
         let clienteExiste = await Cliente.findOne({
             where: {
-                id: _animal.idCliente
+                id: _animal.clienteId
             }
         })
 
-        if(!clienteExiste){
+        if (!clienteExiste) {
             return "Cliente não existente"
         }
     }
 
-    if (!_animal.idEspecie) {
+    if (!_animal.especieId) {
         return "Espécie não informada"
     } else {
         let especieExiste = await Especie.findOne({
             where: {
-                id: _animal.idEspecie
+                id: _animal.especieId
             }
         })
 
@@ -39,12 +39,12 @@ async function validar(_animal, _acao) {
         }
     }
 
-    if (!_animal.idRaca) {
+    if (!_animal.racaId) {
         return "Raça não informada"
     } else {
         let racaExiste = await Raca.findOne({
             where: {
-                id: _animal.idRaca
+                id: _animal.racaId
             }
         })
 
@@ -60,7 +60,7 @@ async function validar(_animal, _acao) {
 
 service.buscarTodos = async () => {
     try {
-        let animais = await Animal.findAll()
+        let animais = await Animal.findAll({ include: [{ all: true }] })
 
         if (animais.length === 0) {
             return { err: `Nenhum animal encontrado` }
@@ -79,10 +79,10 @@ service.buscarPorId = async (_id) => {
     }
 
     try {
-        let animal = await Animal.findOne({
+        let animal = await Animal.findOne({ include: [{ all: true }] }, {
             where: {
                 id: _id
-            }
+            },
         })
 
         if (!animal) {
@@ -123,9 +123,9 @@ service.atualizarAnimal = async (_id, _animal) => {
             nome: _animal.nome,
             dataNascimento: _animal.dataNascimento,
             cor: _animal.cor,
-            idCliente: _animal.idCliente,
-            idEspecie: _animal.idEspecie,
-            idRaca: _animal.idRaca
+            clienteId: _animal.clienteId,
+            especieId: _animal.especieId,
+            racaId: _animal.racaId
         }, {
             where: {
                 id: _id

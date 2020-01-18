@@ -8,11 +8,11 @@ Servico.init({
         allowNull: false
     },
     valor: {
-        type: Sequelize.NUMBER,
+        type: Sequelize.DOUBLE,
         allowNull: false
     },
     tempoMedioAtendimento: {
-        type: Sequelize.NUMBER
+        type: Sequelize.DOUBLE
     }
 }, {
     sequelize: db,

@@ -17,14 +17,14 @@ Animal.init({
     cor: {
         type: Sequelize.STRING
     },
-    idCliente: {
+    clienteId: {
         type: Sequelize.BIGINT,
         references: {
             model: Cliente,
             key: 'id'
         }
     },
-    idEspecie: {
+    especieId: {
         type: Sequelize.BIGINT,
         references: {
             model: Especie,
@@ -32,7 +32,7 @@ Animal.init({
         },
         allowNull: false
     },
-    idRaca: {
+    racaId: {
         type: Sequelize.BIGINT,
         references: {
             model: Raca,
@@ -44,5 +44,9 @@ Animal.init({
     sequelize: db,
     modelName: 'animal'
 });
+
+Animal.belongsTo(Cliente)
+Animal.belongsTo(Especie)
+Animal.belongsTo(Raca)
 
 export default Animal
