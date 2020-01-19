@@ -8,7 +8,7 @@ async function validar(_agendamentoHasAnimal, _acao) {
     if (!_agendamentoHasAnimal.agendamentoId) {
         return "Agendamento não informado"
     } else {
-        let agendamentoExiste = await AgendamentoHasAnimal.findOne({
+        let agendamentoExiste = await Agendamento.findOne({
             where: {
                 id: _agendamentoHasAnimal.agendamentoId
             }
@@ -41,6 +41,17 @@ async function validar(_agendamentoHasAnimal, _acao) {
         if(agendamento.clienteId != animalExiste.clienteId){
             return "Animal não pertencente ao responsável do agendamento"
         }
+    }
+
+    let agendamentoAnimalRepetido = await AgendamentoHasAnimal.findOne({
+        where: {
+            agendamentoId: _agendamentoHasAnimal.agendamentoId,
+            animalId: _agendamentoHasAnimal.animalId
+        }
+    })
+
+    if(agendamentoAnimalRepetido){
+        return "Animal já vinculado ao agendamento"
     }
 }
 
@@ -100,7 +111,7 @@ service.buscarPorAgendamento = async (_id) => {
     }
 
     try {
-        let agendamentoHasAnimal = await AgendamentoHasAnimal.findOne({ include: [{ all: true }] }, {
+        let agendamentoHasAnimal = await AgendamentoHasAnimal.findAll({ include: [{ all: true }] }, {
             where: {
                 agendamentoId: _id
             }
@@ -110,7 +121,7 @@ service.buscarPorAgendamento = async (_id) => {
             return { err: `Animal de agendamento não encontrado` }
         }
 
-        return agendamentoHasAnimal
+        return { obj: agendamentoHasAnimal, proximo: false, offset: 0, total: agendamentoHasAnimal.length }
     } catch (err) {
         return { err: `Erro ao buscar animal de agendamento: ${err}` }
     }

@@ -43,7 +43,14 @@ router.get('/agendamento/:id', async (req, res) => {
         res.send(new ResponseBuilder(false, agendamentoHasAnimal.err))
     }
 
-    res.send(new ResponseBuilder(true, "Animais de agendamento buscado com sucesso", agendamentoHasAnimal))
+    res.send(new ResponseBuilder(
+        true,
+        "Animais de agendamentos buscados com sucesso",
+        agendamentoHasAnimal.obj,
+        agendamentoHasAnimal.proximo,
+        agendamentoHasAnimal.offset,
+        req.query.limit,
+        agendamentoHasAnimal.total))
 })
 
 router.post('/', async (req, res) => {
