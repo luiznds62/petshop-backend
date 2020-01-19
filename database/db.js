@@ -3,5 +3,7 @@ import Sequelize from 'sequelize'
 export default new Sequelize('petshop', 'postgres', '1234', {
     host: 'localhost',
     dialect: 'postgres',
-    timezone: '00:00'
+    dialectOptions: {
+        dateStrings: true,
+    },
 });
