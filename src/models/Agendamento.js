@@ -1,6 +1,9 @@
 
 import Sequelize from 'sequelize'
 import db from '../../database/db'
+import Cliente from '../models/Cliente'
+import Servico from '../models/Servico'
+import Animal from '../models/Animal'
 
 class Agendamento extends Sequelize.Model { }
 Agendamento.init({
@@ -25,12 +28,12 @@ Agendamento.init({
         values: ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sabado', 'Domingo'],
         allowNull: false
     },
-    duracao: {
-        type: Sequelize.DOUBLE,
+    horarioInicio: {
+        type: Sequelize.DATE,
         allowNull: false
     },
-    horarioInicio: {
-        type: Sequelize.STRING,
+    horarioFim: {
+        type: Sequelize.DATE,
         allowNull: false
     },
     observacao: {

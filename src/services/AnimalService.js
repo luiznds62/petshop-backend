@@ -128,7 +128,7 @@ service.buscarPorId = async (_id) => {
 
         return animal
     } catch (err) {
-        return { err: `Erro ao buscar especie: ${err}` }
+        return { err: `Erro ao buscar animal: ${err}` }
     }
 }
 

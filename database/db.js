@@ -1,6 +1,7 @@
 import Sequelize from 'sequelize'
 
-export default new Sequelize('petshop','postgres','1234', {
+export default new Sequelize('petshop', 'postgres', '1234', {
     host: 'localhost',
-    dialect: 'postgres'
-})
+    dialect: 'postgres',
+    timezone: '00:00'
+});
