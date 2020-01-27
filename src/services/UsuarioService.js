@@ -1,7 +1,9 @@
 import Usuario from '../models/Usuario'
-import ResponseBuilder from '../common/ResponseBuilder'
+import emailService from './EmailService'
 import jwt from 'jsonwebtoken'
 import authConfig from '../../config/auth.json'
+import crypto from 'crypto'
+import html from '../../config/email/templateResetEmail'
 
 let service = {}
 
@@ -50,6 +52,83 @@ async function validar(_usuario) {
 
     if (await buscarPorEmail(_usuario.email) != null) {
         return "Email já utilizado"
+    }
+}
+
+service.resetarSenha = async (_email, _senha, _token) => {
+    if (!_email) {
+        return "Email não informado"
+    } else {
+        let usuarioExiste = await Usuario.findOne({
+            where: {
+                email: _email
+            }
+        })
+
+        if (!usuarioExiste) {
+            return { err: "Nenhum usuário encontrado para o email informado" }
+        }
+
+        let agora = new Date()
+
+        if (agora > usuarioExiste.expiracaoToken) {
+            return { err: "Token expirado" }
+        }
+
+        if (_token != usuarioExiste.tokenResetarSenha) {
+            return { err: "Token inválido" }
+        }
+
+        let usuarioAlterado = await Usuario.update({
+            senha: _senha
+        }, {
+            where: {
+                email: _email
+            }
+        })
+
+        return usuarioAlterado
+    }
+}
+
+service.gerarTokenSenha = async (_email) => {
+    if (!_email) {
+        return { err: "Email não informado" }
+    } else {
+        let usuarioExiste = await Usuario.findOne({
+            where: {
+                email: _email
+            }
+        })
+
+        if (!usuarioExiste) {
+            return { err: "Nenhum usuário contém o email informado" }
+        }
+
+        let token = crypto.randomBytes(20).toString('hex');
+        let agora = new Date();
+        agora.setHours(agora.getHours() + 1);
+
+        try {
+            await Usuario.update({
+                tokenResetarSenha: token,
+                expiracaoToken: agora
+            }, {
+                where: {
+                    email: _email
+                }
+            })
+        } catch (error) {
+            return { err: "Ocorreu um erro interno" }
+        }
+
+        emailService.enviarEmail('luiznds62@gmail.com',
+            'luiznds@hotmail.com',
+            "Resetar Senha Petshop",
+            `Olá, tudo bem?
+            Utilize este token para resetar sua senha: ${token}`, html(token))
+
+        return []
     }
 }
 

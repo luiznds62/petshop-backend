@@ -23,6 +23,26 @@ router.post('/', async (req, res) => {
     res.send(new ResponseBuilder(true, 'Usuário salvo com sucesso', usuario))
 })
 
+router.post('/esquecisenha', async (req, res) => {
+    let gerouToken = await usuarioService.gerarTokenSenha(req.body.email)
+
+    if (gerouToken.err) {
+        res.send(new ResponseBuilder(false, gerouToken.err, []))
+    }
+
+    res.send(new ResponseBuilder(true, 'Token gerado e enviado ao email', gerouToken))
+})
+
+router.post('/resetarsenha', async (req, res) => {
+    let senhaResetada = await usuarioService.resetarSenha(req.body.email,req.body.senha,req.body.token)
+
+    if (senhaResetada.err) {
+        res.send(new ResponseBuilder(false, senhaResetada.err, []))
+    }
+
+    res.send(new ResponseBuilder(true, 'Senha resetada com sucesso', senhaResetada))
+})
+
 router.post('/autenticar', async (req, res) => {
     let autenticacao = await usuarioService.autenticar(req.body)
 

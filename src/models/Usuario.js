@@ -15,6 +15,14 @@ Usuario.init({
   email: {
     type: Sequelize.STRING,
     allowNull: false
+  },
+  tokenResetarSenha: {
+    type: Sequelize.STRING,
+    defaultValue: ''
+  },
+  expiracaoToken: {
+    type: Sequelize.DATE,
+    defaultValue: new Date(1800)
   }
 }, {
   sequelize: db,
