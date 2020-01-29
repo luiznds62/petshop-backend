@@ -56,8 +56,14 @@ async function validar(_usuario) {
 }
 
 service.resetarSenha = async (_email, _senha, _token) => {
+    if (!_senha) {
+        return { err: "Nova senha não informada" }
+    }
+    if (!_token) {
+        return { err: "Token não informado" }
+    }
     if (!_email) {
-        return "Email não informado"
+        return { err: "Email não informado" }
     } else {
         let usuarioExiste = await Usuario.findOne({
             where: {
@@ -123,7 +129,7 @@ service.gerarTokenSenha = async (_email) => {
         }
 
         emailService.enviarEmail('luiznds62@gmail.com',
-            'luiznds@hotmail.com',
+            _email,
             "Resetar Senha Petshop",
             `Olá, tudo bem?
             Utilize este token para resetar sua senha: ${token}`, html(token))
@@ -144,6 +150,32 @@ service.buscarTodos = async () => {
     }
     catch (err) {
         return { err: `Erro ao buscar usuários: ${err}` }
+    }
+}
+
+service.buscarPorLogin = async (_login) => {
+    try {
+        let usuario = await Usuario.findOne({
+            where: {
+                login: _login
+            }
+        })
+
+        if (!usuario) {
+            return { err: 'Nenhum usuário encontrado' }
+        }
+
+        let usuarioRetorno = {
+            id: usuario.id,
+            email: usuario.email,
+            createdAt: usuario.createdAt,
+            updatedAt: usuario.updatedAt
+        }
+
+        return usuarioRetorno
+    }
+    catch (err) {
+        return { err: `Erro ao buscar usuário: ${err}` }
     }
 }
 

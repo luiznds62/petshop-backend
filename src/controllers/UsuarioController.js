@@ -13,6 +13,16 @@ router.get('/', async (req, res) => {
     res.send(new ResponseBuilder(true, 'Usuários buscados com sucesso', usuarios))
 })
 
+router.get('/:login', async (req, res) => {
+    var usuario = await usuarioService.buscarPorLogin(req.params.login)
+
+    if (usuario.err) {
+        res.send(new ResponseBuilder(false, usuario.err, []))
+    }
+
+    res.send(new ResponseBuilder(true, 'Usuário buscado com sucesso', usuario))
+})
+
 router.post('/', async (req, res) => {
     let usuario = await usuarioService.salvarUsuario(req.body)
 
