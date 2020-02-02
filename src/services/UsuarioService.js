@@ -207,17 +207,24 @@ service.autenticar = async (_autentica) => {
             return { err: `Senha não informada` }
         }
 
-        let usuario = await buscarPorLogin(auth.login)
+        let usuarioBanco = await buscarPorLogin(auth.login)
 
-        if (!usuario) {
+        if (!usuarioBanco) {
             return { err: `Usuário não encontrado` }
         }
 
-        if (usuario.senha != auth.senha) {
+        if (usuarioBanco.senha != auth.senha) {
             return { err: `Senha inválida` }
         }
 
-        return { usuario, token: gerarToken({ id: usuario.id }) }
+        let usuario = {
+            id: usuarioBanco.id,
+            email: usuarioBanco.email,
+            createdAt: usuarioBanco.createdAt,
+            updatedAt: usuarioBanco.updatedAt
+        }
+
+        return { usuario, token: gerarToken({ id: usuarioBanco.id }) }
     } catch (err) {
         return { err: `Erro ao autenticar: ${err}` }
     }
