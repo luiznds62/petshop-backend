@@ -158,13 +158,13 @@ service.desvincularUsuarioDeEmpresa = async (_empresaId, _usuarioId) => {
     }
 }
 
-service.buscarPorUsuario = async (_usuarioId) => {
+service.buscarPorUsuario = async (_usuarioId, offset = 0, limit = 25, order = "ASC") => {
     if (!_usuarioId) {
         return { err: "ID do Usuário não informado" }
     }
 
     try {
-        let usuarioHasEmpresa = await UsuarioHasEmpresa.findOne({
+        let usuarioHasEmpresa = await UsuarioHasEmpresa.findAll({ include: [{ all: true }], offset: offset, limit: limit, order: [['id', order]] }, {
             where: {
                 usuarioId: _usuarioId
             }

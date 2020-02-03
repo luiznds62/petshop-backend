@@ -25,7 +25,7 @@ async function validar(_empresa, _operacao) {
             }
         }
         if (_empresa.cpfCnpj.length == 14) {
-            if (_empresa.razaoSocial) {
+            if (!_empresa.razaoSocial) {
                 return "Razão Social não informada"
             }
 

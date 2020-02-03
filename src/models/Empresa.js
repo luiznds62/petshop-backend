@@ -21,6 +21,15 @@ Empresa.init({
         allowNull: false,
         unique: true
     },
+    site: {
+        type: Sequelize.STRING
+    },
+    dataAbertura: {
+        type: Sequelize.DATE
+    },
+    email: {
+        type: Sequelize.STRING
+    },
     habilitado: {
         type: Sequelize.BOOLEAN,
         allowNull: false,
