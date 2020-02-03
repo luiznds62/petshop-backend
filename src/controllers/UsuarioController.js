@@ -33,6 +33,16 @@ router.post('/', async (req, res) => {
     res.send(new ResponseBuilder(true, 'Usuário salvo com sucesso', usuario))
 })
 
+router.post('/trocarsenha', async (req, res) => {
+    let usuario = await usuarioService.trocarSenha(req.body)
+
+    if (usuario.err) {
+        res.send(new ResponseBuilder(false, usuario.err, []))
+    }
+
+    res.send(new ResponseBuilder(true, 'Senha alterada com sucesso', usuario))
+})
+
 router.post('/esquecisenha', async (req, res) => {
     let gerouToken = await usuarioService.gerarTokenSenha(req.body.email)
 

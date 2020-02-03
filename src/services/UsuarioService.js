@@ -55,6 +55,47 @@ async function validar(_usuario) {
     }
 }
 
+service.trocarSenha = async (_dados) => {
+    if (!_dados.login) {
+        return { err: "Usuário não informado" }
+    }
+    if (!_dados.senhaAntiga) {
+        return { err: "Senha antiga não informada" }
+    } else {
+        let usuarioExiste = await Usuario.findOne({
+            where: {
+                login: _dados.login
+            }
+        })
+
+        if (usuarioExiste.senha != _dados.senhaAntiga) {
+            return { err: "Senha antiga inválida" }
+        }
+    }
+
+    if (!_dados.senhaNova) {
+        return { err: "Nova senha não informada" }
+    } else {
+        if (_dados.senhaNova.length < 8) {
+            return { err: "A nova senha precisa conter no mínimo 8 caractéres" }
+        }
+    }
+
+    try {
+        let usuarioAlterado = await Usuario.update({
+            senha: _dados.senhaNova
+        }, {
+            where: {
+                login: _dados.login
+            }
+        })
+
+        return usuarioAlterado
+    } catch (error) {
+        return { err: "Ocorreu um erro ao alterar" }
+    }
+}
+
 service.resetarSenha = async (_email, _senha, _token) => {
     if (!_senha) {
         return { err: "Nova senha não informada" }
@@ -219,6 +260,7 @@ service.autenticar = async (_autentica) => {
 
         let usuario = {
             id: usuarioBanco.id,
+            login: usuarioBanco.login,
             email: usuarioBanco.email,
             createdAt: usuarioBanco.createdAt,
             updatedAt: usuarioBanco.updatedAt
