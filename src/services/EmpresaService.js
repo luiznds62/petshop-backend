@@ -70,6 +70,54 @@ async function validar(_empresa, _operacao) {
     }
 }
 
+service.buscarCaminhoLogo = async (_empresaId) => {
+    if (!_empresaId) {
+        return { err: "Id não informado" }
+    }
+
+    let empresa = await Empresa.findOne({
+        where: {
+            id: _empresaId
+        }
+    })
+
+    if (!empresa) {
+        return { err: "Empresa não encontrada" }
+    }
+
+    return empresa.logo
+}
+
+service.salvarCaminhoLogo = async (_empresaId, _path) => {
+    if (!_empresaId) {
+        return { err: "Empresa não informada" }
+    } else {
+        let empresaExiste = await Empresa.findOne({
+            where: {
+                id: _empresaId
+            }
+        })
+
+        if (!empresaExiste) {
+            return { err: "Empresa não encontrada" }
+        }
+    }
+
+    if (!_path) {
+        return { err: "Caminho da imagem não encontrado" }
+    }
+
+    let empresaAtualizada = await Empresa.update({
+        logo: _path
+    }, {
+        where: {
+            id: _empresaId
+        }
+    })
+
+    return empresaAtualizada
+}
+
 service.buscarTodos = async (offset = 0, limit = 25, order = "ASC") => {
     try {
         let empresas = await Empresa.findAll({ include: [{ all: true }], offset: offset, limit: limit, order: [['id', order]] })
@@ -77,7 +125,7 @@ service.buscarTodos = async (offset = 0, limit = 25, order = "ASC") => {
         if (empresas.length === 0) {
             return { err: `Nenhuma empresa encontrada` }
         }
-        
+
         let qtd = await Empresa.count()
         let proximo = false
 
