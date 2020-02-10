@@ -33,13 +33,14 @@ let router = express.Router()
 router.use(authMiddleware)
 
 router.get('/:id/logo', async (req, res) => {
+
     let nomeLogo = await empresaService.buscarCaminhoLogo(req.params.id)
 
     if (nomeLogo.err) {
-        res.send(new ResponseBuilder(false, nomeLogo.err))
+        res.sendFile(path.join(__dirname, `../uploads/images/empresa/notfound.jpg`))
+    }else{
+        res.sendFile(path.join(__dirname, `../uploads/images/empresa/${nomeLogo}`))
     }
-
-    res.sendFile(path.join(__dirname, `../uploads/images/empresa/${nomeLogo}`))
 })
 
 router.post('/upload/logo', multer(multerConfig).single('logo'), (req, res) => {
@@ -48,7 +49,7 @@ router.post('/upload/logo', multer(multerConfig).single('logo'), (req, res) => {
             req.body.logo = req.file.filename;
         }
 
-        empresaService.salvarCaminhoLogo(req.body.empresaId,req.file.filename)
+        empresaService.salvarCaminhoLogo(req.body.empresaId, req.file.filename)
 
         res.send(new ResponseBuilder(true, 'Upload realizado com sucesso'))
 

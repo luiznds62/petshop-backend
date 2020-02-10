@@ -83,6 +83,10 @@ service.buscarCaminhoLogo = async (_empresaId) => {
 
     if (!empresa) {
         return { err: "Empresa não encontrada" }
+    } else {
+        if (empresa.logo === "") {
+            return { err: "Logo não encontrada" }
+        }
     }
 
     return empresa.logo

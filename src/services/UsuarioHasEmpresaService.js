@@ -164,7 +164,8 @@ service.buscarPorUsuario = async (_usuarioId, offset = 0, limit = 25, order = "A
     }
 
     try {
-        let usuarioHasEmpresa = await UsuarioHasEmpresa.findAll({ include: [{ all: true }], offset: offset, limit: limit, order: [['id', order]] }, {
+        let usuarioHasEmpresa = await UsuarioHasEmpresa.findAll({
+            include: [{ all: true }], offset: offset, limit: limit, order: [['id', order]], 
             where: {
                 usuarioId: _usuarioId
             }
