@@ -15,15 +15,15 @@ import cidade from './src/controllers/CidadeController'
 import bairro from './src/controllers/BairroController'
 import endereco from './src/controllers/EnderecoController'
 import pessoa from './src/controllers/PessoaController'
-// import cliente from './src/controllers/ClienteController'
-// import especie from './src/controllers/EspecieController'
-// import raca from './src/controllers/RacaController'
-// import animal from './src/controllers/AnimalController'
-// import servico from './src/controllers/ServicoController'
-// import tipocontrato from './src/controllers/TipoContratoController'
-// import contrato from './src/controllers/ContratoController'
-// import agendamento from './src/controllers/AgendamentoController'
-// import agendamentohasanimal from './src/controllers/AgendamentoHasAnimalController'
+import cliente from './src/controllers/ClienteController'
+import especie from './src/controllers/EspecieController'
+import raca from './src/controllers/RacaController'
+import animal from './src/controllers/AnimalController'
+import servico from './src/controllers/ServicoController'
+import tipocontrato from './src/controllers/TipoContratoController'
+import contrato from './src/controllers/ContratoController'
+import agendamento from './src/controllers/AgendamentoController'
+import agendamentohasanimal from './src/controllers/AgendamentoHasAnimalController'
 
 let port = process.env.PORT || 3000
 let app = express()
@@ -49,15 +49,15 @@ app.use('/cidade', cidade)
 app.use('/bairro', bairro)
 app.use('/endereco', endereco)
 app.use('/pessoa', pessoa)
-// app.use('/cliente', cliente)
-// app.use('/especie', especie)
-// app.use('/raca', raca)
-// app.use('/animal', animal)
-// app.use('/servico', servico)
-// app.use('/tipocontrato', tipocontrato)
-// app.use('/contrato', contrato)
-// app.use('/agendamento', agendamento)
-// app.use('/agendamentohasanimal', agendamentohasanimal)
+app.use('/cliente', cliente)
+app.use('/especie', especie)
+app.use('/raca', raca)
+app.use('/animal', animal)
+app.use('/servico', servico)
+app.use('/tipocontrato', tipocontrato)
+app.use('/contrato', contrato)
+app.use('/agendamento', agendamento)
+app.use('/agendamentohasanimal', agendamentohasanimal)
 
 app.get('/', (req, res) => {
     res.send("Endpoint inválido")

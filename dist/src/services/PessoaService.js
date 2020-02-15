@@ -10,6 +10,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const Pessoa_1 = require("../models/Pessoa");
+const ValidadorCpfCnpj_1 = require("../common/ValidadorCpfCnpj");
+const ValidadorDatas_1 = require("../common/ValidadorDatas");
+let validadorCpfCnpj = new ValidadorCpfCnpj_1.ValidadorCpfCnpj();
+let validadorData = new ValidadorDatas_1.ValidadorData();
 class PessoaService {
     validar(_pessoa, _acao) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -29,7 +33,7 @@ class PessoaService {
                     return "CPF já cadastrado";
                 }
                 else if (_acao != 'atualizacao') {
-                    if (!this.validadorCpfCnpj.validarCPF(_pessoa.cpf)) {
+                    if (!validadorCpfCnpj.validarCPF(_pessoa.cpf)) {
                         return "CPF inválido";
                     }
                 }
@@ -38,7 +42,7 @@ class PessoaService {
                 return "Data de nascimento não informada";
             }
             else {
-                if (!this.validadorData.validarData(_pessoa.dataNascimento)) {
+                if (!validadorData.validarData(_pessoa.dataNascimento)) {
                     return "Data inválida";
                 }
             }

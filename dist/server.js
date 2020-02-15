@@ -15,15 +15,15 @@ const CidadeController_1 = require("./src/controllers/CidadeController");
 const BairroController_1 = require("./src/controllers/BairroController");
 const EnderecoController_1 = require("./src/controllers/EnderecoController");
 const PessoaController_1 = require("./src/controllers/PessoaController");
-// import cliente from './src/controllers/ClienteController'
-// import especie from './src/controllers/EspecieController'
-// import raca from './src/controllers/RacaController'
-// import animal from './src/controllers/AnimalController'
-// import servico from './src/controllers/ServicoController'
-// import tipocontrato from './src/controllers/TipoContratoController'
-// import contrato from './src/controllers/ContratoController'
-// import agendamento from './src/controllers/AgendamentoController'
-// import agendamentohasanimal from './src/controllers/AgendamentoHasAnimalController'
+const ClienteController_1 = require("./src/controllers/ClienteController");
+const EspecieController_1 = require("./src/controllers/EspecieController");
+const RacaController_1 = require("./src/controllers/RacaController");
+const AnimalController_1 = require("./src/controllers/AnimalController");
+const ServicoController_1 = require("./src/controllers/ServicoController");
+const TipoContratoController_1 = require("./src/controllers/TipoContratoController");
+const ContratoController_1 = require("./src/controllers/ContratoController");
+const AgendamentoController_1 = require("./src/controllers/AgendamentoController");
+const AgendamentoHasAnimalController_1 = require("./src/controllers/AgendamentoHasAnimalController");
 let port = process.env.PORT || 3000;
 let app = express();
 app.use(cors());
@@ -45,15 +45,15 @@ app.use('/cidade', CidadeController_1.default);
 app.use('/bairro', BairroController_1.default);
 app.use('/endereco', EnderecoController_1.default);
 app.use('/pessoa', PessoaController_1.default);
-// app.use('/cliente', cliente)
-// app.use('/especie', especie)
-// app.use('/raca', raca)
-// app.use('/animal', animal)
-// app.use('/servico', servico)
-// app.use('/tipocontrato', tipocontrato)
-// app.use('/contrato', contrato)
-// app.use('/agendamento', agendamento)
-// app.use('/agendamentohasanimal', agendamentohasanimal)
+app.use('/cliente', ClienteController_1.default);
+app.use('/especie', EspecieController_1.default);
+app.use('/raca', RacaController_1.default);
+app.use('/animal', AnimalController_1.default);
+app.use('/servico', ServicoController_1.default);
+app.use('/tipocontrato', TipoContratoController_1.default);
+app.use('/contrato', ContratoController_1.default);
+app.use('/agendamento', AgendamentoController_1.default);
+app.use('/agendamentohasanimal', AgendamentoHasAnimalController_1.default);
 app.get('/', (req, res) => {
     res.send("Endpoint inválido");
 });

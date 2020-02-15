@@ -2,10 +2,9 @@ import { Pessoa } from '../models/Pessoa'
 import { ValidadorCpfCnpj } from '../common/ValidadorCpfCnpj'
 import { ValidadorData } from '../common/ValidadorDatas'
 
+let validadorCpfCnpj = new ValidadorCpfCnpj()
+let validadorData = new ValidadorData()
 export class PessoaService {
-    validadorCpfCnpj: ValidadorCpfCnpj
-    validadorData: ValidadorData
-
     async validar(_pessoa, _acao) {
         if (!_pessoa.nome) {
             return "Nome não informado"
@@ -23,7 +22,7 @@ export class PessoaService {
             if (pessoaDuplicadada && _acao === 'criacao') {
                 return "CPF já cadastrado"
             } else if (_acao != 'atualizacao') {
-                if (!this.validadorCpfCnpj.validarCPF(_pessoa.cpf)) {
+                if (!validadorCpfCnpj.validarCPF(_pessoa.cpf)) {
                     return "CPF inválido"
                 }
             }
@@ -32,7 +31,7 @@ export class PessoaService {
         if (!_pessoa.dataNascimento) {
             return "Data de nascimento não informada"
         } else {
-            if (!this.validadorData.validarData(_pessoa.dataNascimento)) {
+            if (!validadorData.validarData(_pessoa.dataNascimento)) {
                 return "Data inválida"
             }
         }
