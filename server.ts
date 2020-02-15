@@ -12,8 +12,8 @@ import usuariohasempresa from './src/controllers/UsuarioHasEmpresaController'
 import empresa from './src/controllers/EmpresaController'
 import estado from './src/controllers/EstadoController'
 import cidade from './src/controllers/CidadeController'
-// import bairro from './src/controllers/BairroController'
-// import endereco from './src/controllers/EnderecoController'
+import bairro from './src/controllers/BairroController'
+import endereco from './src/controllers/EnderecoController'
 import pessoa from './src/controllers/PessoaController'
 // import cliente from './src/controllers/ClienteController'
 // import especie from './src/controllers/EspecieController'
@@ -46,8 +46,8 @@ app.use('/usuariohasempresa', usuariohasempresa)
 app.use('/empresa', empresa)
 app.use('/estado', estado)
 app.use('/cidade', cidade)
-// app.use('/bairro', bairro)
-// app.use('/endereco', endereco)
+app.use('/bairro', bairro)
+app.use('/endereco', endereco)
 app.use('/pessoa', pessoa)
 // app.use('/cliente', cliente)
 // app.use('/especie', especie)

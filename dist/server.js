@@ -12,8 +12,8 @@ const UsuarioHasEmpresaController_1 = require("./src/controllers/UsuarioHasEmpre
 const EmpresaController_1 = require("./src/controllers/EmpresaController");
 const EstadoController_1 = require("./src/controllers/EstadoController");
 const CidadeController_1 = require("./src/controllers/CidadeController");
-// import bairro from './src/controllers/BairroController'
-// import endereco from './src/controllers/EnderecoController'
+const BairroController_1 = require("./src/controllers/BairroController");
+const EnderecoController_1 = require("./src/controllers/EnderecoController");
 const PessoaController_1 = require("./src/controllers/PessoaController");
 // import cliente from './src/controllers/ClienteController'
 // import especie from './src/controllers/EspecieController'
@@ -42,8 +42,8 @@ app.use('/usuariohasempresa', UsuarioHasEmpresaController_1.default);
 app.use('/empresa', EmpresaController_1.default);
 app.use('/estado', EstadoController_1.default);
 app.use('/cidade', CidadeController_1.default);
-// app.use('/bairro', bairro)
-// app.use('/endereco', endereco)
+app.use('/bairro', BairroController_1.default);
+app.use('/endereco', EnderecoController_1.default);
 app.use('/pessoa', PessoaController_1.default);
 // app.use('/cliente', cliente)
 // app.use('/especie', especie)
