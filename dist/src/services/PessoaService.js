@@ -52,7 +52,7 @@ class PessoaService {
             try {
                 let pessoas = yield Pessoa_1.Pessoa.findAll({ limit: limit, offset: offset, order: [['id', order]] });
                 if (pessoas.length === 0) {
-                    return { err: `Nenhuma pessoa encontrado` };
+                    throw new TypeError(`Nenhuma pessoa encontrado`);
                 }
                 let quantidade = yield Pessoa_1.Pessoa.count();
                 let proximo = false;
@@ -62,14 +62,14 @@ class PessoaService {
                 return { obj: pessoas, proximo: proximo, offset: offset, total: quantidade };
             }
             catch (err) {
-                return { err: `Erro ao buscar pessoas: ${err}` };
+                throw new TypeError(`${err.message}`);
             }
         });
     }
     buscarPorId(_id) {
         return __awaiter(this, void 0, void 0, function* () {
             if (!_id) {
-                return { err: "ID não informado" };
+                throw new TypeError("ID não informado");
             }
             try {
                 let pessoa = yield Pessoa_1.Pessoa.findOne({
@@ -78,12 +78,12 @@ class PessoaService {
                     }
                 });
                 if (!pessoa) {
-                    return { err: `Pessoa não encontrada` };
+                    throw new TypeError(`Pessoa não encontrada`);
                 }
                 return pessoa;
             }
             catch (err) {
-                return { err: `Erro ao buscar pessoa: ${err}` };
+                throw new TypeError(`${err.message}`);
             }
         });
     }
@@ -91,14 +91,14 @@ class PessoaService {
         return __awaiter(this, void 0, void 0, function* () {
             let inconsistencias = yield this.validar(_pessoa, 'criacao');
             if (inconsistencias) {
-                return { err: inconsistencias };
+                throw new TypeError(inconsistencias);
             }
             try {
                 let pessoaNova = yield Pessoa_1.Pessoa.create(_pessoa);
                 return pessoaNova;
             }
             catch (err) {
-                return { err: `Erro ao salvar pessoa: ${err}` };
+                throw new TypeError(`${err.message}`);
             }
         });
     }
@@ -106,7 +106,7 @@ class PessoaService {
         return __awaiter(this, void 0, void 0, function* () {
             let inconsistencias = yield this.validar(_pessoa, 'atualizacao');
             if (inconsistencias) {
-                return { err: inconsistencias };
+                throw new TypeError(inconsistencias);
             }
             try {
                 let pessoaAtualizada = yield Pessoa_1.Pessoa.update({
@@ -122,14 +122,14 @@ class PessoaService {
                 return pessoaAtualizada;
             }
             catch (err) {
-                return { err: `Ocorreu um erro ao atualizar: ${err}` };
+                throw new TypeError(`${err.message}`);
             }
         });
     }
     deletarPessoa(_id) {
         return __awaiter(this, void 0, void 0, function* () {
             if (!_id) {
-                return { err: "ID não informado" };
+                throw new TypeError("ID não informado");
             }
             else {
                 let pessoaDeletar = yield Pessoa_1.Pessoa.findOne({
@@ -138,7 +138,7 @@ class PessoaService {
                     }
                 });
                 if (!pessoaDeletar) {
-                    return { err: `Pessoa com ID: ${_id} não encontrada` };
+                    throw new TypeError(`Pessoa com ID: ${_id} não encontrada`);
                 }
             }
             try {
@@ -150,7 +150,7 @@ class PessoaService {
                 return pessoaDeletada;
             }
             catch (err) {
-                return { err: `Erro ao deletar pessoa: ${err}` };
+                throw new TypeError(`${err.message}`);
             }
         });
     }

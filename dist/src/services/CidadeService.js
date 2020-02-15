@@ -47,7 +47,7 @@ class CidadeService {
                 return { obj: cidades, proximo: proximo, offset: offset, total: quantidade };
             }
             catch (err) {
-                throw new TypeError(`Erro ao buscar cidades: ${err}`);
+                throw new TypeError(`${err.message}`);
             }
         });
     }
@@ -68,7 +68,7 @@ class CidadeService {
                 return cidade;
             }
             catch (err) {
-                throw new TypeError(`Erro ao buscar cidade: ${err}`);
+                throw new TypeError(`${err.message}`);
             }
         });
     }
@@ -106,7 +106,7 @@ class CidadeService {
                 }
             }
             catch (err) {
-                throw new TypeError(`Erro ao buscar Cidade: ${err}`);
+                throw new TypeError(`${err.message}`);
             }
         });
     }

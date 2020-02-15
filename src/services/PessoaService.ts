@@ -47,7 +47,7 @@ export class PessoaService {
             let pessoas = await Pessoa.findAll({ limit: limit, offset: offset, order: [['id', order]] })
 
             if (pessoas.length === 0) {
-                return { err: `Nenhuma pessoa encontrado` }
+                throw new TypeError(`Nenhuma pessoa encontrado`)
             }
 
             let quantidade = await Pessoa.count()
@@ -60,14 +60,14 @@ export class PessoaService {
             return { obj: pessoas, proximo: proximo, offset: offset, total: quantidade }
         }
         catch (err) {
-            return { err: `Erro ao buscar pessoas: ${err}` }
+            throw new TypeError(`${err.message}`)
         }
     }
 
 
     async buscarPorId(_id) {
         if (!_id) {
-            return { err: "ID não informado" }
+            throw new TypeError("ID não informado")
         }
 
         try {
@@ -78,12 +78,12 @@ export class PessoaService {
             })
 
             if (!pessoa) {
-                return { err: `Pessoa não encontrada` }
+                throw new TypeError(`Pessoa não encontrada`)
             }
 
             return pessoa
         } catch (err) {
-            return { err: `Erro ao buscar pessoa: ${err}` }
+            throw new TypeError(`${err.message}`)
         }
     }
 
@@ -91,7 +91,7 @@ export class PessoaService {
         let inconsistencias = await this.validar(_pessoa, 'criacao')
 
         if (inconsistencias) {
-            return { err: inconsistencias }
+            throw new TypeError(inconsistencias)
         }
 
         try {
@@ -99,7 +99,7 @@ export class PessoaService {
 
             return pessoaNova
         } catch (err) {
-            return { err: `Erro ao salvar pessoa: ${err}` }
+            throw new TypeError(`${err.message}`)
         }
     }
 
@@ -107,7 +107,7 @@ export class PessoaService {
         let inconsistencias = await this.validar(_pessoa, 'atualizacao')
 
         if (inconsistencias) {
-            return { err: inconsistencias }
+            throw new TypeError(inconsistencias)
         }
 
         try {
@@ -124,13 +124,13 @@ export class PessoaService {
 
             return pessoaAtualizada
         } catch (err) {
-            return { err: `Ocorreu um erro ao atualizar: ${err}` }
+            throw new TypeError(`${err.message}`)
         }
     }
 
     async deletarPessoa(_id) {
         if (!_id) {
-            return { err: "ID não informado" }
+            throw new TypeError("ID não informado")
         } else {
             let pessoaDeletar = await Pessoa.findOne({
                 where: {
@@ -139,7 +139,7 @@ export class PessoaService {
             })
 
             if (!pessoaDeletar) {
-                return { err: `Pessoa com ID: ${_id} não encontrada` }
+                throw new TypeError(`Pessoa com ID: ${_id} não encontrada`)
             }
         }
 
@@ -152,7 +152,7 @@ export class PessoaService {
 
             return pessoaDeletada
         } catch (err) {
-            return { err: `Erro ao deletar pessoa: ${err}` }
+            throw new TypeError(`${err.message}`)
         }
     }
 }

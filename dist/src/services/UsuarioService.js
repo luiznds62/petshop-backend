@@ -190,7 +190,7 @@ class UsuarioService {
                 return usuarios;
             }
             catch (err) {
-                throw new TypeError(`Erro ao buscar usuários: ${err}`);
+                throw new TypeError(`${err.message}`);
             }
         });
     }
@@ -214,7 +214,7 @@ class UsuarioService {
                 return usuarioRetorno;
             }
             catch (err) {
-                throw new TypeError(`Erro ao buscar usuário: ${err}`);
+                throw new TypeError(`${err.message}`);
             }
         });
     }
@@ -235,7 +235,7 @@ class UsuarioService {
                 };
             }
             catch (err) {
-                throw new TypeError(`Erro ao criar usuário: ${err}`);
+                throw new TypeError(`${err.message}`);
             }
         });
     }
@@ -266,7 +266,7 @@ class UsuarioService {
                 return { usuario, token: this.gerarToken({ id: usuarioBanco.id }) };
             }
             catch (err) {
-                throw new TypeError(`Erro ao autenticar: ${err}`);
+                throw new TypeError(`${err.message}`);
             }
         });
     }

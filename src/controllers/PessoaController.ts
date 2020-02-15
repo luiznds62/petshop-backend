@@ -8,61 +8,58 @@ let router = express.Router()
 router.use(authMiddleware)
 
 router.get('/', async (req, res) => {
-    let pessoas = await pessoaService.buscarTodos(req.query.offset, req.query.limit, req.query.order)
-
-    if (pessoas.err) {
-        res.send(new ResponseBuilder(false, pessoas.err))
+    try {
+        let pessoas = await pessoaService.buscarTodos(req.query.offset, req.query.limit, req.query.order)
+        res.send(new ResponseBuilder(
+            true,
+            'Pessoas encontrados com sucesso',
+            pessoas.obj,
+            pessoas.proximo,
+            pessoas.offset,
+            req.query.limit,
+            pessoas.total
+        ))
+    } catch (error) {
+        res.send(new ResponseBuilder(false, error.message))
     }
-
-    res.send(new ResponseBuilder(
-        true,
-        'Pessoas encontrados com sucesso',
-        pessoas.obj,
-        pessoas.proximo,
-        pessoas.offset,
-        req.query.limit,
-        pessoas.total
-    ))
 })
 
 router.get('/:id', async (req, res) => {
-    let pessoa = await pessoaService.buscarPorId(req.params.id)
-
-    if (pessoa.err) {
-        res.send(new ResponseBuilder(false, pessoa.err))
+    try {
+        let pessoa = await pessoaService.buscarPorId(req.params.id)
+        res.send(new ResponseBuilder(true, "Pessoa buscada com sucesso", pessoa))
+    } catch (error) {
+        res.send(new ResponseBuilder(false, error.message))
     }
-
-    res.send(new ResponseBuilder(true, "Pessoa buscada com sucesso", pessoa))
 })
 
 router.post('/', async (req, res) => {
-    let pessoa = await pessoaService.salvarPessoa(req.body)
-
-    if (pessoa.err) {
-        res.send(new ResponseBuilder(false, pessoa.err))
+    try {
+        let pessoa = await pessoaService.salvarPessoa(req.body)
+        res.send(new ResponseBuilder(true, "Pessoa salva com sucesso", pessoa))
+    } catch (error) {
+        res.send(new ResponseBuilder(false, error.message))
     }
-
-    res.send(new ResponseBuilder(true, "Pessoa salva com sucesso", pessoa))
 })
 
 router.put('/:id', async (req, res) => {
-    let pessoa = await pessoaService.atualizarPessoa(req.params.id, req.body)
+    try {
+        let pessoa = await pessoaService.atualizarPessoa(req.params.id, req.body)
+        res.send(new ResponseBuilder(true, "Pessoa atualizada com sucesso", pessoa))
 
-    if (pessoa.err) {
-        res.send(new ResponseBuilder(false, pessoa.err))
+    } catch (error) {
+        res.send(new ResponseBuilder(false, error.message))
     }
-
-    res.send(new ResponseBuilder(true, "Pessoa atualizada com sucesso", pessoa))
 })
 
 router.delete('/:id', async (req, res) => {
-    let pessoa = await pessoaService.deletarPessoa(req.params.id)
+    try {
+        let pessoa = await pessoaService.deletarPessoa(req.params.id)
+        res.send(new ResponseBuilder(true, "Pessoa deletada com sucesso", pessoa))
 
-    if (pessoa.err) {
-        res.send(new ResponseBuilder(false, pessoa.err))
+    } catch (error) {
+        res.send(new ResponseBuilder(false, error.message))
     }
-
-    res.send(new ResponseBuilder(true, "Pessoa deletada com sucesso", pessoa))
 })
 
 export default router

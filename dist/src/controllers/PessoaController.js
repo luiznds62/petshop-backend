@@ -17,38 +17,48 @@ let pessoaService = new PessoaService_1.PessoaService();
 let router = express.Router();
 router.use(AuthMiddleware_1.default);
 router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    let pessoas = yield pessoaService.buscarTodos(req.query.offset, req.query.limit, req.query.order);
-    if (pessoas.err) {
-        res.send(new ResponseBuilder_1.ResponseBuilder(false, pessoas.err));
+    try {
+        let pessoas = yield pessoaService.buscarTodos(req.query.offset, req.query.limit, req.query.order);
+        res.send(new ResponseBuilder_1.ResponseBuilder(true, 'Pessoas encontrados com sucesso', pessoas.obj, pessoas.proximo, pessoas.offset, req.query.limit, pessoas.total));
     }
-    res.send(new ResponseBuilder_1.ResponseBuilder(true, 'Pessoas encontrados com sucesso', pessoas.obj, pessoas.proximo, pessoas.offset, req.query.limit, pessoas.total));
+    catch (error) {
+        res.send(new ResponseBuilder_1.ResponseBuilder(false, error.message));
+    }
 }));
 router.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    let pessoa = yield pessoaService.buscarPorId(req.params.id);
-    if (pessoa.err) {
-        res.send(new ResponseBuilder_1.ResponseBuilder(false, pessoa.err));
+    try {
+        let pessoa = yield pessoaService.buscarPorId(req.params.id);
+        res.send(new ResponseBuilder_1.ResponseBuilder(true, "Pessoa buscada com sucesso", pessoa));
     }
-    res.send(new ResponseBuilder_1.ResponseBuilder(true, "Pessoa buscada com sucesso", pessoa));
+    catch (error) {
+        res.send(new ResponseBuilder_1.ResponseBuilder(false, error.message));
+    }
 }));
 router.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    let pessoa = yield pessoaService.salvarPessoa(req.body);
-    if (pessoa.err) {
-        res.send(new ResponseBuilder_1.ResponseBuilder(false, pessoa.err));
+    try {
+        let pessoa = yield pessoaService.salvarPessoa(req.body);
+        res.send(new ResponseBuilder_1.ResponseBuilder(true, "Pessoa salva com sucesso", pessoa));
     }
-    res.send(new ResponseBuilder_1.ResponseBuilder(true, "Pessoa salva com sucesso", pessoa));
+    catch (error) {
+        res.send(new ResponseBuilder_1.ResponseBuilder(false, error.message));
+    }
 }));
 router.put('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    let pessoa = yield pessoaService.atualizarPessoa(req.params.id, req.body);
-    if (pessoa.err) {
-        res.send(new ResponseBuilder_1.ResponseBuilder(false, pessoa.err));
+    try {
+        let pessoa = yield pessoaService.atualizarPessoa(req.params.id, req.body);
+        res.send(new ResponseBuilder_1.ResponseBuilder(true, "Pessoa atualizada com sucesso", pessoa));
     }
-    res.send(new ResponseBuilder_1.ResponseBuilder(true, "Pessoa atualizada com sucesso", pessoa));
+    catch (error) {
+        res.send(new ResponseBuilder_1.ResponseBuilder(false, error.message));
+    }
 }));
 router.delete('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    let pessoa = yield pessoaService.deletarPessoa(req.params.id);
-    if (pessoa.err) {
-        res.send(new ResponseBuilder_1.ResponseBuilder(false, pessoa.err));
+    try {
+        let pessoa = yield pessoaService.deletarPessoa(req.params.id);
+        res.send(new ResponseBuilder_1.ResponseBuilder(true, "Pessoa deletada com sucesso", pessoa));
     }
-    res.send(new ResponseBuilder_1.ResponseBuilder(true, "Pessoa deletada com sucesso", pessoa));
+    catch (error) {
+        res.send(new ResponseBuilder_1.ResponseBuilder(false, error.message));
+    }
 }));
 exports.default = router;

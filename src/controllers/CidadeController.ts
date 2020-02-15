@@ -28,7 +28,6 @@ router.get('/:id', async (req, res) => {
     try {
         let cidade = await cidadeService.buscarPorId(req.params.id)
         res.send(new ResponseBuilder(true, 'Cidade encontrada com sucesso', cidade))
-
     } catch (error) {
         res.send(new ResponseBuilder(false, error.message))
     }
@@ -38,7 +37,6 @@ router.get('/:uf/:nome', async (req, res) => {
     try {
         let cidade = await cidadeService.buscarPorUFNome(req.params.uf, req.params.nome)
         res.send(new ResponseBuilder(true, 'Cidade encontrada com sucesso', cidade))
-
     } catch (error) {
         res.send(new ResponseBuilder(false, error.message))
     }
@@ -48,7 +46,6 @@ router.post('/', async (req, res) => {
     try {
         let cidade = await cidadeService.salvarCidade(req.body)
         res.send(new ResponseBuilder(true, "Cidade salva com sucesso", cidade))
-
     } catch (error) {
         res.send(new ResponseBuilder(false, error.message))
     }

@@ -59,7 +59,7 @@ class EstadoService {
                 return { obj: estados, proximo: proximo, offset: offset, total: quantidade };
             }
             catch (err) {
-                throw new TypeError(`Erro ao buscar estados: ${err}`);
+                throw new TypeError(`${err.message}`);
             }
         });
     }
@@ -83,7 +83,7 @@ class EstadoService {
                 return estado;
             }
             catch (err) {
-                throw new TypeError(`Erro ao buscar Estado por UF: ${err}`);
+                throw new TypeError(`${err.message}`);
             }
         });
     }

@@ -40,7 +40,7 @@ export class CidadeService {
             return { obj: cidades, proximo: proximo, offset: offset, total: quantidade }
         }
         catch (err) {
-            throw new TypeError(`Erro ao buscar cidades: ${err}`)
+            throw new TypeError(`${err.message}`)
         }
     }
 
@@ -62,7 +62,7 @@ export class CidadeService {
 
             return cidade
         } catch (err) {
-            throw new TypeError(`Erro ao buscar cidade: ${err}`)
+            throw new TypeError(`${err.message}`)
         }
     }
 
@@ -101,7 +101,7 @@ export class CidadeService {
                 throw new TypeError(`Estado não encontrado para UF: ${_uf}`)
             }
         } catch (err) {
-            throw new TypeError(`Erro ao buscar Cidade: ${err}`)
+            throw new TypeError(`${err.message}`)
         }
     }
 

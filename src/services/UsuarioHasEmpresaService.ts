@@ -21,7 +21,7 @@ export class UsuarioHasEmpresaService {
             return { obj: usuarioHasEmpresas, proximo: proximo, offset: offset, total: qtd }
         }
         catch (err) {
-            throw new TypeError(`Erro ao buscar Usuário vinculado a Empresa: ${err}`)
+            throw new TypeError(`${err.message}`)
         }
     }
 
@@ -63,7 +63,7 @@ export class UsuarioHasEmpresaService {
 
             return usuarioHasEmpresaNovo
         } catch (err) {
-            throw new TypeError(`Ocorreu um erro ao criar vinculo do usuário com a empresa: ${err}`)
+            throw new TypeError(`${err.message}`)
         }
     }
 
@@ -108,7 +108,7 @@ export class UsuarioHasEmpresaService {
 
             return usuarioHasEmpresaAtualizar
         } catch (err) {
-            throw new TypeError(`Ocorreu um erro ao habilitar usuário da empresa: ${err}`)
+            throw new TypeError(`${err.message}`)
         }
     }
 
@@ -154,7 +154,7 @@ export class UsuarioHasEmpresaService {
 
             return usuarioHasEmpresaAtualizar
         } catch (err) {
-            throw new TypeError(`Ocorreu um erro ao desabilitar usuário da empresa: ${err}`)
+            throw new TypeError(`${err.message}`)
         }
     }
 
@@ -177,7 +177,7 @@ export class UsuarioHasEmpresaService {
 
             return usuarioHasEmpresa
         } catch (err) {
-            throw new TypeError(`Ocorreu um erro ao buscar: ${err}`)
+            throw new TypeError(`${err.message}`)
         }
     }
 }

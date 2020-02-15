@@ -67,7 +67,7 @@ export class EmpresaService {
                     return "Endereco não encontrado"
                 }
             } catch (err) {
-                return `Erro ao buscar endereco: ${err}`
+                return `Erro ao buscar endereco: ${err.message}`
             }
         }
     }
@@ -142,7 +142,7 @@ export class EmpresaService {
             return { obj: empresas, proximo: proximo, offset: offset, total: qtd }
         }
         catch (err) {
-            throw new TypeError(`Erro ao buscar empresas: ${err}`)
+            throw new TypeError(`${err.message}`)
         }
     }
 
@@ -156,7 +156,7 @@ export class EmpresaService {
         try {
             return await Empresa.create(_empresa)
         } catch (err) {
-            throw new TypeError(`Erro ao salvar a empresa: ${err}`)
+            throw new TypeError(`${err.message}`)
         }
     }
 
@@ -179,7 +179,7 @@ export class EmpresaService {
 
             return empresa
         } catch (err) {
-            throw new TypeError(`Erro ao buscar empresa: ${err}`)
+            throw new TypeError(`${err.message}`)
         }
     }
 
@@ -204,13 +204,13 @@ export class EmpresaService {
 
             return empresaAtualizar
         } catch (err) {
-            throw new TypeError(`Erro ao atualizar: ${err}`)
+            throw new TypeError(`${err.message}`)
         }
     }
 
     async deletarEmpresa(_id) {
         if (!_id) {
-            return "Id não informada"
+            throw new TypeError("Id não informada")
         }
 
         try {
@@ -220,7 +220,7 @@ export class EmpresaService {
                 }
             })
         } catch (err) {
-            throw new TypeError(`Erro ao deletar a empresa: ${err}`)
+            throw new TypeError(`${err.message}`)
         }
     }
 }
