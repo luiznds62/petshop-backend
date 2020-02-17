@@ -30,3 +30,4 @@ Usuario.init({
     sequelize: db_1.default,
     modelName: 'usuario'
 });
+//# sourceMappingURL=Usuario.js.map

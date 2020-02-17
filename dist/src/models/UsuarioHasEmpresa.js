@@ -40,3 +40,4 @@ UsuarioHasEmpresa.init({
 });
 UsuarioHasEmpresa.belongsTo(Usuario_1.Usuario);
 UsuarioHasEmpresa.belongsTo(Empresa_1.Empresa);
+//# sourceMappingURL=UsuarioHasEmpresa.js.map

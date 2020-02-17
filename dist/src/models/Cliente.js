@@ -36,3 +36,4 @@ Cliente.init({
 });
 Cliente.belongsTo(Pessoa_1.Pessoa);
 Cliente.belongsTo(Endereco_1.Endereco);
+//# sourceMappingURL=Cliente.js.map

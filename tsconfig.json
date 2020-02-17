@@ -3,6 +3,7 @@
     "outDir": "dist",               
     "target": "es6",                          
     "module": "commonjs",     
-    "resolveJsonModule": true                
+    "resolveJsonModule": true,
+    "sourceMap": true            
   }
 }

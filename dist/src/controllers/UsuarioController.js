@@ -69,3 +69,4 @@ router.post('/autenticar', (req, res) => __awaiter(void 0, void 0, void 0, funct
     }
 }));
 exports.default = router;
+//# sourceMappingURL=UsuarioController.js.map

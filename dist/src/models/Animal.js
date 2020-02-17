@@ -67,3 +67,4 @@ Animal.init({
 Animal.belongsTo(Cliente_1.Cliente);
 Animal.belongsTo(Especie_1.Especie);
 Animal.belongsTo(Raca_1.Raca);
+//# sourceMappingURL=Animal.js.map

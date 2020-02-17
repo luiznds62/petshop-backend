@@ -18,3 +18,4 @@ Estado.init({
     sequelize: db_1.default,
     modelName: 'estado'
 });
+//# sourceMappingURL=Estado.js.map

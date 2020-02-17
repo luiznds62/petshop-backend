@@ -17,3 +17,4 @@ TipoContrato.init({
     sequelize: db_1.default,
     modelName: 'tipoContrato'
 });
+//# sourceMappingURL=TipoContrato.js.map

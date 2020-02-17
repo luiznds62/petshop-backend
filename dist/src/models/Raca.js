@@ -17,3 +17,4 @@ Raca.init({
     sequelize: db_1.default,
     modelName: 'raca'
 });
+//# sourceMappingURL=Raca.js.map

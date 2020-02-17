@@ -54,3 +54,4 @@ Empresa.init({
     modelName: 'empresa'
 });
 Empresa.belongsTo(Endereco_1.Endereco);
+//# sourceMappingURL=Empresa.js.map

@@ -30,3 +30,4 @@ AgendamentoHasAnimal.init({
 });
 AgendamentoHasAnimal.belongsTo(Agendamento_1.Agendamento);
 AgendamentoHasAnimal.belongsTo(Animal_1.Animal);
+//# sourceMappingURL=AgendamentoHasAnimal.js.map

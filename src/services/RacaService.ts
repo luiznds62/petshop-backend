@@ -1,4 +1,4 @@
-import { Especie } from "../models/especie"
+import { Especie } from "../models/Especie"
 import { Raca } from "../models/Raca"
 
 export class RacaService {

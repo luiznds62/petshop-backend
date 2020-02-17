@@ -30,3 +30,4 @@ Pessoa.init({
     sequelize: db_1.default,
     modelName: 'pessoa'
 });
+//# sourceMappingURL=Pessoa.js.map

@@ -83,3 +83,4 @@ class ValidadorCpfCnpj {
     }
 }
 exports.ValidadorCpfCnpj = ValidadorCpfCnpj;
+//# sourceMappingURL=ValidadorCpfCnpj.js.map

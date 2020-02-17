@@ -8,3 +8,4 @@ exports.default = new sequelize_1.Sequelize('petshop', 'postgres', '1234', {
         dateStrings: true,
     },
 });
+//# sourceMappingURL=db.js.map

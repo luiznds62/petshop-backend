@@ -23,3 +23,4 @@ exports.default = (req, res, next) => {
         return next();
     });
 };
+//# sourceMappingURL=AuthMiddleware.js.map

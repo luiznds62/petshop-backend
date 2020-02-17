@@ -1,6 +1,6 @@
 import * as Sequelize from 'sequelize'
 import db from '../../database/db'
-import { Especie } from './especie';
+import { Especie } from './Especie';
 
 export class Raca extends Sequelize.Model { }
 Raca.init({

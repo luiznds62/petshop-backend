@@ -6,6 +6,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 // Configurações
 const db_1 = require("./database/db");
+const environments_1 = require("./config/environments");
 // Controllers
 const UsuarioController_1 = require("./src/controllers/UsuarioController");
 const UsuarioHasEmpresaController_1 = require("./src/controllers/UsuarioHasEmpresaController");
@@ -24,39 +25,56 @@ const TipoContratoController_1 = require("./src/controllers/TipoContratoControll
 const ContratoController_1 = require("./src/controllers/ContratoController");
 const AgendamentoController_1 = require("./src/controllers/AgendamentoController");
 const AgendamentoHasAnimalController_1 = require("./src/controllers/AgendamentoHasAnimalController");
-let port = process.env.PORT || 3000;
-let app = express();
-app.use(cors());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-db_1.default.authenticate().then(() => {
-    console.log("DB Conectado");
-}).catch(err => {
-    console.log("Erro ao conectar no banco: " + err);
-});
-// Cria ou atualiza dados do Banco
-db_1.default.sync();
-// Rotas
-app.use('/usuario', UsuarioController_1.default);
-app.use('/usuariohasempresa', UsuarioHasEmpresaController_1.default);
-app.use('/empresa', EmpresaController_1.default);
-app.use('/estado', EstadoController_1.default);
-app.use('/cidade', CidadeController_1.default);
-app.use('/bairro', BairroController_1.default);
-app.use('/endereco', EnderecoController_1.default);
-app.use('/pessoa', PessoaController_1.default);
-app.use('/cliente', ClienteController_1.default);
-app.use('/especie', EspecieController_1.default);
-app.use('/raca', RacaController_1.default);
-app.use('/animal', AnimalController_1.default);
-app.use('/servico', ServicoController_1.default);
-app.use('/tipocontrato', TipoContratoController_1.default);
-app.use('/contrato', ContratoController_1.default);
-app.use('/agendamento', AgendamentoController_1.default);
-app.use('/agendamentohasanimal', AgendamentoHasAnimalController_1.default);
-app.get('/', (req, res) => {
-    res.send("Endpoint inválido");
-});
-app.listen(port, () => {
-    console.log("Servidor rodando na porta - ", port);
-});
+class Server {
+    initRoutes() {
+        return new Promise((resolve, reject) => {
+            try {
+                this.application = express();
+                this.application.use(cors());
+                this.application.use(bodyParser.json());
+                this.application.use(bodyParser.urlencoded({ extended: true }));
+                db_1.default.authenticate()
+                    .then(() => {
+                    console.log("DB Conectado");
+                })
+                    .catch(err => {
+                    console.log("Erro ao conectar no banco: " + err);
+                });
+                // Cria ou atualiza dados do Banco
+                db_1.default.sync();
+                // Rotas
+                this.application.use("/usuario", UsuarioController_1.default);
+                this.application.use("/usuariohasempresa", UsuarioHasEmpresaController_1.default);
+                this.application.use("/empresa", EmpresaController_1.default);
+                this.application.use("/estado", EstadoController_1.default);
+                this.application.use("/cidade", CidadeController_1.default);
+                this.application.use("/bairro", BairroController_1.default);
+                this.application.use("/endereco", EnderecoController_1.default);
+                this.application.use("/pessoa", PessoaController_1.default);
+                this.application.use("/cliente", ClienteController_1.default);
+                this.application.use("/especie", EspecieController_1.default);
+                this.application.use("/raca", RacaController_1.default);
+                this.application.use("/animal", AnimalController_1.default);
+                this.application.use("/servico", ServicoController_1.default);
+                this.application.use("/tipocontrato", TipoContratoController_1.default);
+                this.application.use("/contrato", ContratoController_1.default);
+                this.application.use("/agendamento", AgendamentoController_1.default);
+                this.application.use("/agendamentohasanimal", AgendamentoHasAnimalController_1.default);
+                this.application.get("/", (req, res) => {
+                    res.send("Endpoint inválido");
+                });
+                this.application = this.application.listen(environments_1.environments.server.port, () => {
+                    resolve(this.application);
+                });
+            }
+            catch (error) {
+                reject(error);
+            }
+        });
+    }
+    bootstrap() {
+        return this.initRoutes().then(() => this);
+    }
+}
+exports.Server = Server;
+//# sourceMappingURL=server.js.map

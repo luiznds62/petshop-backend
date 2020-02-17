@@ -45,3 +45,4 @@ Endereco.init({
 });
 Endereco.belongsTo(Cidade_1.Cidade);
 Endereco.belongsTo(Bairro_1.Bairro);
+//# sourceMappingURL=Endereco.js.map

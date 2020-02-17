@@ -235,3 +235,4 @@ function gerarHTML(token) {
 `;
 }
 exports.default = gerarHTML;
+//# sourceMappingURL=templateResetEmail.js.map

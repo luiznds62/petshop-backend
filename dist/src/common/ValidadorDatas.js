@@ -12,3 +12,4 @@ class ValidadorData {
     }
 }
 exports.ValidadorData = ValidadorData;
+//# sourceMappingURL=ValidadorDatas.js.map

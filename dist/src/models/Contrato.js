@@ -51,3 +51,4 @@ Contrato.init({
 Contrato.belongsTo(Cliente_1.Cliente);
 Contrato.belongsTo(TipoContrato_1.TipoContrato);
 Contrato.belongsTo(Servico_1.Servico);
+//# sourceMappingURL=Contrato.js.map

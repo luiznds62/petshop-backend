@@ -24,3 +24,4 @@ Cidade.init({
     modelName: 'cidade'
 });
 Cidade.belongsTo(Estado_1.Estado);
+//# sourceMappingURL=Cidade.js.map

@@ -17,3 +17,4 @@ Especie.init({
     sequelize: db_1.default,
     modelName: 'especie'
 });
+//# sourceMappingURL=Especie.js.map

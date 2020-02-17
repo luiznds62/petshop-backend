@@ -24,3 +24,4 @@ Bairro.init({
     modelName: 'bairro'
 });
 Bairro.belongsTo(Cidade_1.Cidade);
+//# sourceMappingURL=Bairro.js.map

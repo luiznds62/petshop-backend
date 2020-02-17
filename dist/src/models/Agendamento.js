@@ -46,3 +46,4 @@ Agendamento.init({
 });
 Agendamento.belongsTo(Cliente_1.Cliente);
 Agendamento.belongsTo(Servico_1.Servico);
+//# sourceMappingURL=Agendamento.js.map

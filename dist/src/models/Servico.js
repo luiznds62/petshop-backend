@@ -21,3 +21,4 @@ Servico.init({
     sequelize: db_1.default,
     modelName: 'servico'
 });
+//# sourceMappingURL=Servico.js.map

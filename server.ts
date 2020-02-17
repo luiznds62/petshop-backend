@@ -1,68 +1,86 @@
 // Dependências
-import * as express from "express"
-import * as bodyParser from "body-parser"
-import * as cors from "cors"
+import * as express from "express";
+import * as bodyParser from "body-parser";
+import * as cors from "cors";
 
 // Configurações
-import db from './database/db'
+import db from "./database/db";
+import { environments } from "./config/environments";
 
 // Controllers
-import usuario from './src/controllers/UsuarioController'
-import usuariohasempresa from './src/controllers/UsuarioHasEmpresaController'
-import empresa from './src/controllers/EmpresaController'
-import estado from './src/controllers/EstadoController'
-import cidade from './src/controllers/CidadeController'
-import bairro from './src/controllers/BairroController'
-import endereco from './src/controllers/EnderecoController'
-import pessoa from './src/controllers/PessoaController'
-import cliente from './src/controllers/ClienteController'
-import especie from './src/controllers/EspecieController'
-import raca from './src/controllers/RacaController'
-import animal from './src/controllers/AnimalController'
-import servico from './src/controllers/ServicoController'
-import tipocontrato from './src/controllers/TipoContratoController'
-import contrato from './src/controllers/ContratoController'
-import agendamento from './src/controllers/AgendamentoController'
-import agendamentohasanimal from './src/controllers/AgendamentoHasAnimalController'
+import usuario from "./src/controllers/UsuarioController";
+import usuariohasempresa from "./src/controllers/UsuarioHasEmpresaController";
+import empresa from "./src/controllers/EmpresaController";
+import estado from "./src/controllers/EstadoController";
+import cidade from "./src/controllers/CidadeController";
+import bairro from "./src/controllers/BairroController";
+import endereco from "./src/controllers/EnderecoController";
+import pessoa from "./src/controllers/PessoaController";
+import cliente from "./src/controllers/ClienteController";
+import especie from "./src/controllers/EspecieController";
+import raca from "./src/controllers/RacaController";
+import animal from "./src/controllers/AnimalController";
+import servico from "./src/controllers/ServicoController";
+import tipocontrato from "./src/controllers/TipoContratoController";
+import contrato from "./src/controllers/ContratoController";
+import agendamento from "./src/controllers/AgendamentoController";
+import agendamentohasanimal from "./src/controllers/AgendamentoHasAnimalController";
 
-let port = process.env.PORT || 3000
-let app = express()
-app.use(cors())
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }))
+export class Server {
+  application: any;
 
-db.authenticate().then(() => {
-    console.log("DB Conectado")
-}).catch(err => {
-    console.log("Erro ao conectar no banco: " + err)
-})
+  initRoutes(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      try {
+        this.application = express();
+        this.application.use(cors());
+        this.application.use(bodyParser.json());
+        this.application.use(bodyParser.urlencoded({ extended: true }));
 
-// Cria ou atualiza dados do Banco
-db.sync()
+        db.authenticate()
+          .then(() => {
+            console.log("DB Conectado");
+          })
+          .catch(err => {
+            console.log("Erro ao conectar no banco: " + err);
+          });
 
-// Rotas
-app.use('/usuario', usuario)
-app.use('/usuariohasempresa', usuariohasempresa)
-app.use('/empresa', empresa)
-app.use('/estado', estado)
-app.use('/cidade', cidade)
-app.use('/bairro', bairro)
-app.use('/endereco', endereco)
-app.use('/pessoa', pessoa)
-app.use('/cliente', cliente)
-app.use('/especie', especie)
-app.use('/raca', raca)
-app.use('/animal', animal)
-app.use('/servico', servico)
-app.use('/tipocontrato', tipocontrato)
-app.use('/contrato', contrato)
-app.use('/agendamento', agendamento)
-app.use('/agendamentohasanimal', agendamentohasanimal)
+        // Cria ou atualiza dados do Banco
+        db.sync();
 
-app.get('/', (req, res) => {
-    res.send("Endpoint inválido")
-})
+        // Rotas
+        this.application.use("/usuario", usuario);
+        this.application.use("/usuariohasempresa", usuariohasempresa);
+        this.application.use("/empresa", empresa);
+        this.application.use("/estado", estado);
+        this.application.use("/cidade", cidade);
+        this.application.use("/bairro", bairro);
+        this.application.use("/endereco", endereco);
+        this.application.use("/pessoa", pessoa);
+        this.application.use("/cliente", cliente);
+        this.application.use("/especie", especie);
+        this.application.use("/raca", raca);
+        this.application.use("/animal", animal);
+        this.application.use("/servico", servico);
+        this.application.use("/tipocontrato", tipocontrato);
+        this.application.use("/contrato", contrato);
+        this.application.use("/agendamento", agendamento);
+        this.application.use("/agendamentohasanimal", agendamentohasanimal);
 
-app.listen(port, () => {
-    console.log("Servidor rodando na porta - ", port)
-})
+        this.application.get("/", (req, res) => {
+          res.send("Endpoint inválido");
+        });
+
+        this.application = this.application.listen(environments.server.port, () => {
+          resolve(this.application);
+        });
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  bootstrap(): Promise<Server> {
+    return this.initRoutes().then(() => this);
+  }
+}
