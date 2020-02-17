@@ -4,10 +4,10 @@ const server = new Server();
 server
   .bootstrap()
   .then(server => {
-    console.log(`Server is listening on: `,server.application.address().port);
+    console.log(`Servidor ouvindo em: `,server.application.address());
   })
   .catch(error => {
-    console.log("Server has failed to start");
+    console.log("Servidor apresentou um erro ao iniciar");
     console.error(error);
     process.exit(1);
   });

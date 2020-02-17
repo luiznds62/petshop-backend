@@ -6,4 +6,5 @@ export default new Sequelize('petshop', 'postgres', '1234', {
     dialectOptions: {
         dateStrings: true,
     },
+    logging: false
 });
