@@ -8,7 +8,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 const express = require("express");
 const PessoaService_1 = require("../services/PessoaService");
 const ResponseBuilder_1 = require("../common/ResponseBuilder");
@@ -16,16 +15,16 @@ const AuthMiddleware_1 = require("../middlewares/AuthMiddleware");
 let pessoaService = new PessoaService_1.PessoaService();
 let router = express.Router();
 router.use(AuthMiddleware_1.default);
-router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let pessoas = yield pessoaService.buscarTodos(req.query.offset, req.query.limit, req.query.order);
-        res.send(new ResponseBuilder_1.ResponseBuilder(true, 'Pessoas encontrados com sucesso', pessoas.obj, pessoas.proximo, pessoas.offset, req.query.limit, pessoas.total));
+        res.send(new ResponseBuilder_1.ResponseBuilder(true, "Pessoas encontrados com sucesso", pessoas.obj, pessoas.proximo, pessoas.offset, req.query.limit, pessoas.total));
     }
     catch (error) {
         res.send(new ResponseBuilder_1.ResponseBuilder(false, error.message));
     }
 }));
-router.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.get("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let pessoa = yield pessoaService.buscarPorId(req.params.id);
         res.send(new ResponseBuilder_1.ResponseBuilder(true, "Pessoa buscada com sucesso", pessoa));
@@ -34,7 +33,7 @@ router.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         res.send(new ResponseBuilder_1.ResponseBuilder(false, error.message));
     }
 }));
-router.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let pessoa = yield pessoaService.salvarPessoa(req.body);
         res.send(new ResponseBuilder_1.ResponseBuilder(true, "Pessoa salva com sucesso", pessoa));
@@ -43,7 +42,7 @@ router.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.send(new ResponseBuilder_1.ResponseBuilder(false, error.message));
     }
 }));
-router.put('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.put("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let pessoa = yield pessoaService.atualizarPessoa(req.params.id, req.body);
         res.send(new ResponseBuilder_1.ResponseBuilder(true, "Pessoa atualizada com sucesso", pessoa));
@@ -52,7 +51,7 @@ router.put('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         res.send(new ResponseBuilder_1.ResponseBuilder(false, error.message));
     }
 }));
-router.delete('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.delete("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let pessoa = yield pessoaService.deletarPessoa(req.params.id);
         res.send(new ResponseBuilder_1.ResponseBuilder(true, "Pessoa deletada com sucesso", pessoa));
@@ -61,5 +60,5 @@ router.delete('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* 
         res.send(new ResponseBuilder_1.ResponseBuilder(false, error.message));
     }
 }));
-exports.default = router;
+module.exports = router;
 //# sourceMappingURL=PessoaController.js.map
