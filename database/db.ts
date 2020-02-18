@@ -1,10 +1,17 @@
-import { Sequelize } from 'sequelize'
+import { Sequelize } from "sequelize";
+import { environments } from "../config/environments";
 
-export default new Sequelize('petshop', 'postgres', '1234', {
-    host: 'localhost',
-    dialect: 'postgres',
+export default new Sequelize(
+  environments.database.name,
+  environments.database.username,
+  environments.database.password,
+  {
+    host: environments.database.host,
+    port: environments.database.port,
+    dialect: "postgres",
     dialectOptions: {
-        dateStrings: true,
+      dateStrings: true
     },
     logging: false
-});
+  }
+);
