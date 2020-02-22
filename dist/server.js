@@ -4,6 +4,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const helmet = require("helmet");
+const hpp = require("hpp");
 const fs = require("fs");
 // Configurações
 const db_1 = require("./database/db");
@@ -35,6 +37,8 @@ class Server {
             try {
                 this.application = express();
                 this.application.use(cors());
+                this.application.use(helmet());
+                this.application.use(hpp());
                 this.application.use(bodyParser.json());
                 this.application.use(bodyParser.urlencoded({ extended: true }));
                 this.loadDb();

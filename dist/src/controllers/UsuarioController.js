@@ -11,9 +11,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 const express = require("express");
 const UsuarioService_1 = require("../services/UsuarioService");
 const ResponseBuilder_1 = require("../common/ResponseBuilder");
+const RateLimiter_1 = require("../common/RateLimiter");
+const AuthMiddleware_1 = require("../middlewares/AuthMiddleware");
 const router = express.Router();
 let usuarioService = new UsuarioService_1.UsuarioService();
-router.get("/:login", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.get("/:login", AuthMiddleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         var usuario = yield usuarioService.buscarPorLogin(req.params.login);
         res.send(new ResponseBuilder_1.ResponseBuilder(true, "Usuário buscado com sucesso", usuario));
@@ -22,7 +24,7 @@ router.get("/:login", (req, res) => __awaiter(void 0, void 0, void 0, function* 
         res.send(new ResponseBuilder_1.ResponseBuilder(false, error.message));
     }
 }));
-router.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.post("/", RateLimiter_1.default(45 * 60 * 1000, 15, new ResponseBuilder_1.ResponseBuilder(false, "Tentativas consequentes excedidas, tente novamente em 45 minutos")), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let usuario = yield usuarioService.salvarUsuario(req.body);
         res.send(new ResponseBuilder_1.ResponseBuilder(true, "Usuário salvo com sucesso", usuario));
@@ -31,7 +33,7 @@ router.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.send(new ResponseBuilder_1.ResponseBuilder(false, error.message));
     }
 }));
-router.post("/trocarsenha", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.post("/trocarsenha", AuthMiddleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let usuario = yield usuarioService.trocarSenha(req.body);
         res.send(new ResponseBuilder_1.ResponseBuilder(true, "Senha alterada com sucesso", usuario));
@@ -40,7 +42,7 @@ router.post("/trocarsenha", (req, res) => __awaiter(void 0, void 0, void 0, func
         res.send(new ResponseBuilder_1.ResponseBuilder(false, error.message));
     }
 }));
-router.post("/esquecisenha", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.post("/esquecisenha", RateLimiter_1.default(60 * 60 * 1000, 50, new ResponseBuilder_1.ResponseBuilder(false, "Tentativas consequentes excedidas,tente novamente em 1 hora")), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let gerouToken = yield usuarioService.gerarTokenSenha(req.body.email);
         res.send(new ResponseBuilder_1.ResponseBuilder(true, "Token gerado e enviado ao email", gerouToken));
@@ -49,7 +51,7 @@ router.post("/esquecisenha", (req, res) => __awaiter(void 0, void 0, void 0, fun
         res.send(new ResponseBuilder_1.ResponseBuilder(false, error.message));
     }
 }));
-router.post("/resetarsenha", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.post("/resetarsenha", RateLimiter_1.default(60 * 60 * 1000, 50, new ResponseBuilder_1.ResponseBuilder(false, "Tentativas consequentes excedidas,tente novamente em 1 hora")), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let senhaResetada = yield usuarioService.resetarSenha(req.body.email, req.body.senha, req.body.token);
         res.send(new ResponseBuilder_1.ResponseBuilder(true, "Senha resetada com sucesso", senhaResetada));
@@ -58,7 +60,7 @@ router.post("/resetarsenha", (req, res) => __awaiter(void 0, void 0, void 0, fun
         res.send(new ResponseBuilder_1.ResponseBuilder(false, error.message));
     }
 }));
-router.post("/autenticar", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.post("/autenticar", RateLimiter_1.default(60 * 1000, 10, new ResponseBuilder_1.ResponseBuilder(false, "Quantidade de tentativas por minuto excedidas")), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let autenticacao = yield usuarioService.autenticar(req.body);
         res.send(new ResponseBuilder_1.ResponseBuilder(true, "Autenticado com sucesso", autenticacao));

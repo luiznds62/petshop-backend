@@ -2,6 +2,8 @@
 import * as express from "express";
 import * as bodyParser from "body-parser";
 import * as cors from "cors";
+import * as helmet from "helmet";
+import * as hpp from "hpp";
 import * as fs from "fs";
 
 // Configurações
@@ -42,6 +44,8 @@ export class Server {
       try {
         this.application = express();
         this.application.use(cors());
+        this.application.use(helmet());
+        this.application.use(hpp());
         this.application.use(bodyParser.json());
         this.application.use(bodyParser.urlencoded({ extended: true }));
         this.loadDb();
