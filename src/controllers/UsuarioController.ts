@@ -49,7 +49,7 @@ router.post(
   "/esquecisenha",
   RateLimiter(
     60 * 60 * 1000,
-    50,
+    15,
     new ResponseBuilder(
       false,
       "Tentativas consequentes excedidas,tente novamente em 1 hora"
@@ -71,7 +71,7 @@ router.post(
   "/resetarsenha",
   RateLimiter(
     60 * 60 * 1000,
-    50,
+    15,
     new ResponseBuilder(
       false,
       "Tentativas consequentes excedidas,tente novamente em 1 hora"

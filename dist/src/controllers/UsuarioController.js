@@ -42,7 +42,7 @@ router.post("/trocarsenha", AuthMiddleware_1.default, (req, res) => __awaiter(vo
         res.send(new ResponseBuilder_1.ResponseBuilder(false, error.message));
     }
 }));
-router.post("/esquecisenha", RateLimiter_1.default(60 * 60 * 1000, 50, new ResponseBuilder_1.ResponseBuilder(false, "Tentativas consequentes excedidas,tente novamente em 1 hora")), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.post("/esquecisenha", RateLimiter_1.default(60 * 60 * 1000, 15, new ResponseBuilder_1.ResponseBuilder(false, "Tentativas consequentes excedidas,tente novamente em 1 hora")), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let gerouToken = yield usuarioService.gerarTokenSenha(req.body.email);
         res.send(new ResponseBuilder_1.ResponseBuilder(true, "Token gerado e enviado ao email", gerouToken));
@@ -51,7 +51,7 @@ router.post("/esquecisenha", RateLimiter_1.default(60 * 60 * 1000, 50, new Respo
         res.send(new ResponseBuilder_1.ResponseBuilder(false, error.message));
     }
 }));
-router.post("/resetarsenha", RateLimiter_1.default(60 * 60 * 1000, 50, new ResponseBuilder_1.ResponseBuilder(false, "Tentativas consequentes excedidas,tente novamente em 1 hora")), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.post("/resetarsenha", RateLimiter_1.default(60 * 60 * 1000, 15, new ResponseBuilder_1.ResponseBuilder(false, "Tentativas consequentes excedidas,tente novamente em 1 hora")), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let senhaResetada = yield usuarioService.resetarSenha(req.body.email, req.body.senha, req.body.token);
         res.send(new ResponseBuilder_1.ResponseBuilder(true, "Senha resetada com sucesso", senhaResetada));

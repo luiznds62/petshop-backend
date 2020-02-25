@@ -14,16 +14,20 @@ export class Server {
   application: any;
 
   loadDb() {
-    db.authenticate()
-      .then(() => {
-        console.log("DB Conectado");
-      })
-      .catch(err => {
-        console.log("Erro ao conectar no banco: " + err);
-      });
+    return new Promise((resolve, reject) => {
+      db.authenticate()
+        .then(() => {
+          // Cria ou atualiza dados do Banco
+          db.sync();
 
-    // Cria ou atualiza dados do Banco
-    db.sync();
+          console.log("DB Conectado");
+          resolve();
+        })
+        .catch(err => {
+          console.log("Erro ao conectar no banco: " + err);
+          reject();
+        });
+    });
   }
 
   loadRoutes() {
@@ -48,7 +52,6 @@ export class Server {
         this.application.use(hpp());
         this.application.use(bodyParser.json());
         this.application.use(bodyParser.urlencoded({ extended: true }));
-        this.loadDb();
         this.loadRoutes();
 
         this.application.get("/", (req, res) => {
@@ -68,6 +71,6 @@ export class Server {
   }
 
   bootstrap(): Promise<Server> {
-    return this.initRoutes().then(() => this);
+    return this.loadDb().then(() => this.initRoutes().then(() => this));
   }
 }

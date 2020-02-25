@@ -9,17 +9,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const Usuario_1 = require("../models/Usuario");
-const EmailService_1 = require("./EmailService");
 const jwt = require("jsonwebtoken");
 const authConfig = require("../../config/auth.json");
 const crypto = require("crypto");
+const bcrypt = require("bcrypt");
+const Usuario_1 = require("../models/Usuario");
+const EmailService_1 = require("./EmailService");
 const templateResetEmail_1 = require("../../config/email/templateResetEmail");
 let emailService = new EmailService_1.EmailService();
 class UsuarioService {
     gerarToken(params = {}) {
         return jwt.sign(params, authConfig.secret, {
-            expiresIn: 86400,
+            expiresIn: 86400
         });
     }
     buscarPorEmailValidate(_email) {
@@ -54,7 +55,7 @@ class UsuarioService {
             if (!_usuario.email) {
                 return "Email não informado";
             }
-            if (!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(_usuario.email))) {
+            if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(_usuario.email)) {
                 return "Email inválido";
             }
             if ((yield this.buscarPorLoginValidate(_usuario.login)) != null) {
@@ -158,7 +159,7 @@ class UsuarioService {
                 if (!usuarioExiste) {
                     throw new TypeError("Nenhum usuário contém o email informado");
                 }
-                let token = crypto.randomBytes(20).toString('hex');
+                let token = crypto.randomBytes(20).toString("hex");
                 let agora = new Date();
                 agora.setHours(agora.getHours() + 1);
                 try {
@@ -174,7 +175,7 @@ class UsuarioService {
                 catch (error) {
                     throw new TypeError("Ocorreu um erro interno");
                 }
-                emailService.enviarEmail('luiznds62@gmail.com', _email, "Resetar Senha Petshop", `Olá, tudo bem?
+                emailService.enviarEmail("luiznds62@gmail.com", _email, "Resetar Senha Petshop", `Olá, tudo bem?
                 Utilize este token para resetar sua senha: ${token}`, templateResetEmail_1.default(token));
                 return [];
             }
@@ -185,7 +186,7 @@ class UsuarioService {
             try {
                 let usuarios = yield Usuario_1.Usuario.findAll();
                 if (!usuarios) {
-                    throw new TypeError('Nenhum usuário encontrado');
+                    throw new TypeError("Nenhum usuário encontrado");
                 }
                 return usuarios;
             }
@@ -203,7 +204,7 @@ class UsuarioService {
                     }
                 });
                 if (!usuario) {
-                    throw new TypeError('Nenhum usuário encontrado');
+                    throw new TypeError("Nenhum usuário encontrado");
                 }
                 let usuarioRetorno = {
                     id: usuario.id,
@@ -253,7 +254,7 @@ class UsuarioService {
                 if (!usuarioBanco) {
                     throw new TypeError(`Usuário não encontrado`);
                 }
-                if (usuarioBanco.senha != auth.senha) {
+                if (!bcrypt.compare(usuarioBanco.senha, auth.senha)) {
                     throw new TypeError(`Senha inválida`);
                 }
                 let usuario = {

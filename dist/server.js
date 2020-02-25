@@ -12,15 +12,19 @@ const db_1 = require("./database/db");
 const environments_1 = require("./config/environments");
 class Server {
     loadDb() {
-        db_1.default.authenticate()
-            .then(() => {
-            console.log("DB Conectado");
-        })
-            .catch(err => {
-            console.log("Erro ao conectar no banco: " + err);
+        return new Promise((resolve, reject) => {
+            db_1.default.authenticate()
+                .then(() => {
+                // Cria ou atualiza dados do Banco
+                db_1.default.sync();
+                console.log("DB Conectado");
+                resolve();
+            })
+                .catch(err => {
+                console.log("Erro ao conectar no banco: " + err);
+                reject();
+            });
         });
-        // Cria ou atualiza dados do Banco
-        db_1.default.sync();
     }
     loadRoutes() {
         const ctlDir = "/src/controllers/";
@@ -41,7 +45,6 @@ class Server {
                 this.application.use(hpp());
                 this.application.use(bodyParser.json());
                 this.application.use(bodyParser.urlencoded({ extended: true }));
-                this.loadDb();
                 this.loadRoutes();
                 this.application.get("/", (req, res) => {
                     res.send("Endpoint inválido");
@@ -56,7 +59,7 @@ class Server {
         });
     }
     bootstrap() {
-        return this.initRoutes().then(() => this);
+        return this.loadDb().then(() => this.initRoutes().then(() => this));
     }
 }
 exports.Server = Server;
