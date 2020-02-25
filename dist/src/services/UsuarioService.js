@@ -254,7 +254,7 @@ class UsuarioService {
                 if (!usuarioBanco) {
                     throw new TypeError(`Usuário não encontrado`);
                 }
-                if (!bcrypt.compare(usuarioBanco.senha, auth.senha)) {
+                if (!(yield bcrypt.compare(auth.senha, usuarioBanco.senha))) {
                     throw new TypeError(`Senha inválida`);
                 }
                 let usuario = {

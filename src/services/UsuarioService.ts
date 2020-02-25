@@ -5,6 +5,7 @@ import * as bcrypt from "bcrypt";
 import { Usuario } from "../models/Usuario";
 import { EmailService } from "./EmailService";
 import gerarHTML from "../../config/email/templateResetEmail";
+import { environments } from "../../config/environments.js";
 
 let emailService = new EmailService();
 
@@ -273,7 +274,7 @@ export class UsuarioService {
         throw new TypeError(`Usuário não encontrado`);
       }
 
-      if (!bcrypt.compare(usuarioBanco.senha, auth.senha)) {
+      if (!(await bcrypt.compare(auth.senha,usuarioBanco.senha))) {
         throw new TypeError(`Senha inválida`);
       }
 
