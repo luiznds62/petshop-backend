@@ -94,7 +94,7 @@ export class EmpresaService {
         return empresa.logo
     }
 
-    async salvarCaminhoLogo(_empresaId, _path) {
+    async salvarCaminhoLogo(_empresaId, _filename) {
         if (!_empresaId) {
             throw new TypeError("Empresa não informada")
         } else {
@@ -109,12 +109,12 @@ export class EmpresaService {
             }
         }
 
-        if (!_path) {
-            throw new TypeError("Caminho da imagem não encontrado")
+        if (!_filename) {
+            throw new TypeError("Nome da imagem não encontrado")
         }
 
         let empresaAtualizada = await Empresa.update({
-            logo: _path
+            logo: _filename
         }, {
             where: {
                 id: _empresaId

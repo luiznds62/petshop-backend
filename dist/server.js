@@ -7,6 +7,7 @@ const cors = require("cors");
 const helmet = require("helmet");
 const hpp = require("hpp");
 const fs = require("fs");
+const fileupload = require("express-fileupload");
 // Configurações
 const db_1 = require("./database/db");
 const environments_1 = require("./config/environments");
@@ -45,6 +46,7 @@ class Server {
                 this.application.use(hpp());
                 this.application.use(bodyParser.json());
                 this.application.use(bodyParser.urlencoded({ extended: true }));
+                this.application.use(fileupload());
                 this.loadRoutes();
                 this.application.get("/", (req, res) => {
                     res.send("Endpoint inválido");

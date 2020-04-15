@@ -5,6 +5,7 @@ import * as cors from "cors";
 import * as helmet from "helmet";
 import * as hpp from "hpp";
 import * as fs from "fs";
+import * as fileupload from "express-fileupload";
 
 // Configurações
 import db from "./database/db";
@@ -52,6 +53,7 @@ export class Server {
         this.application.use(hpp());
         this.application.use(bodyParser.json());
         this.application.use(bodyParser.urlencoded({ extended: true }));
+        this.application.use(fileupload())
         this.loadRoutes();
 
         this.application.get("/", (req, res) => {

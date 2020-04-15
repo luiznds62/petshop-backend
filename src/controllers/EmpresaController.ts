@@ -1,34 +1,12 @@
 import * as express from "express";
-import { EmpresaService } from "../services/EmpresaService";
-import authMiddleware from "../middlewares/AuthMiddleware";
-import { ResponseBuilder } from "../common/ResponseBuilder";
-import * as multer from "multer";
 import * as path from "path";
+import { EmpresaService } from "../services/EmpresaService";
+import { ResponseBuilder } from "../common/ResponseBuilder";
+import { UploadService } from "../common/UploadService";
+import { TipoUpload } from "../common/TipoUpload";
+import authMiddleware from "../middlewares/AuthMiddleware";
 
-const multerConfig = {
-  storage: multer.diskStorage({
-    destination: function(req, file, next) {
-      next(null, "src/uploads/images/empresa");
-    },
-    filename: function(req, file, next) {
-      const ext = file.mimetype.split("/")[1];
-      next(null, file.fieldname + "-" + Date.now() + "." + ext);
-    }
-  }),
-  fileFilter: function(req, file, next) {
-    if (!file) {
-      next();
-    }
-
-    const image = file.mimetype.startsWith("image/");
-    if (image) {
-      next(null, true);
-    } else {
-      next({ message: "Extensão não suportada" }, false);
-    }
-  }
-};
-
+let uploadService = new UploadService();
 let empresaService = new EmpresaService();
 let router = express.Router();
 router.use(authMiddleware);
@@ -41,22 +19,17 @@ router.get("/:id/logo", async (req, res) => {
       path.join(__dirname, `../src/uploads/images/empresa/notfound.jpg`)
     );
   } else {
-    res.sendFile(
-      path.join(__dirname, `../src/uploads/images/empresa/${nomeLogo}`)
-    );
+    uploadService.getFile(nomeLogo, res);
   }
 });
 
 router.post(
   "/upload/logo",
-  multer(multerConfig).single("logo"),
   (req: any, res) => {
     try {
-      if (req.file) {
-        req.body.logo = req.file.filename;
-      }
+      let fileName = uploadService.saveFile(req, TipoUpload.Empresa);
 
-      empresaService.salvarCaminhoLogo(req.body.empresaId, req.file.filename);
+      empresaService.salvarCaminhoLogo(req.body.empresaId, fileName);
 
       res.send(new ResponseBuilder(true, "Upload realizado com sucesso"));
     } catch (error) {

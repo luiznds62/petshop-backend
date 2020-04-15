@@ -96,7 +96,7 @@ class EmpresaService {
             return empresa.logo;
         });
     }
-    salvarCaminhoLogo(_empresaId, _path) {
+    salvarCaminhoLogo(_empresaId, _filename) {
         return __awaiter(this, void 0, void 0, function* () {
             if (!_empresaId) {
                 throw new TypeError("Empresa não informada");
@@ -111,11 +111,11 @@ class EmpresaService {
                     throw new TypeError("Empresa não encontrada");
                 }
             }
-            if (!_path) {
-                throw new TypeError("Caminho da imagem não encontrado");
+            if (!_filename) {
+                throw new TypeError("Nome da imagem não encontrado");
             }
             let empresaAtualizada = yield Empresa_1.Empresa.update({
-                logo: _path
+                logo: _filename
             }, {
                 where: {
                     id: _empresaId

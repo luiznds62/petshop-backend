@@ -9,34 +9,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 const express = require("express");
-const EmpresaService_1 = require("../services/EmpresaService");
-const AuthMiddleware_1 = require("../middlewares/AuthMiddleware");
-const ResponseBuilder_1 = require("../common/ResponseBuilder");
-const multer = require("multer");
 const path = require("path");
-const multerConfig = {
-    storage: multer.diskStorage({
-        destination: function (req, file, next) {
-            next(null, "src/uploads/images/empresa");
-        },
-        filename: function (req, file, next) {
-            const ext = file.mimetype.split("/")[1];
-            next(null, file.fieldname + "-" + Date.now() + "." + ext);
-        }
-    }),
-    fileFilter: function (req, file, next) {
-        if (!file) {
-            next();
-        }
-        const image = file.mimetype.startsWith("image/");
-        if (image) {
-            next(null, true);
-        }
-        else {
-            next({ message: "Extensão não suportada" }, false);
-        }
-    }
-};
+const EmpresaService_1 = require("../services/EmpresaService");
+const ResponseBuilder_1 = require("../common/ResponseBuilder");
+const UploadService_1 = require("../common/UploadService");
+const TipoUpload_1 = require("../common/TipoUpload");
+const AuthMiddleware_1 = require("../middlewares/AuthMiddleware");
+let uploadService = new UploadService_1.UploadService();
 let empresaService = new EmpresaService_1.EmpresaService();
 let router = express.Router();
 router.use(AuthMiddleware_1.default);
@@ -46,15 +25,13 @@ router.get("/:id/logo", (req, res) => __awaiter(void 0, void 0, void 0, function
         res.sendFile(path.join(__dirname, `../src/uploads/images/empresa/notfound.jpg`));
     }
     else {
-        res.sendFile(path.join(__dirname, `../src/uploads/images/empresa/${nomeLogo}`));
+        uploadService.getFile(nomeLogo, res);
     }
 }));
-router.post("/upload/logo", multer(multerConfig).single("logo"), (req, res) => {
+router.post("/upload/logo", (req, res) => {
     try {
-        if (req.file) {
-            req.body.logo = req.file.filename;
-        }
-        empresaService.salvarCaminhoLogo(req.body.empresaId, req.file.filename);
+        let fileName = uploadService.saveFile(req, TipoUpload_1.TipoUpload.Empresa);
+        empresaService.salvarCaminhoLogo(req.body.empresaId, fileName);
         res.send(new ResponseBuilder_1.ResponseBuilder(true, "Upload realizado com sucesso"));
     }
     catch (error) {
