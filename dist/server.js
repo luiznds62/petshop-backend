@@ -6,12 +6,19 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const helmet = require("helmet");
 const hpp = require("hpp");
+const path = require("path");
 const fs = require("fs");
+const shelljs = require("shelljs");
 const fileupload = require("express-fileupload");
 // Configurações
 const db_1 = require("./database/db");
 const environments_1 = require("./config/environments");
 class Server {
+    loadAssets() {
+        let folder = path.basename(__dirname).substr(0, __dirname.length - 4).concat('src/assets/.');
+        folder = "./".concat(folder.substr(4, folder.length));
+        shelljs.cp('-R', folder, './dist/src/assets');
+    }
     loadDb() {
         return new Promise((resolve, reject) => {
             db_1.default.authenticate()
@@ -48,6 +55,7 @@ class Server {
                 this.application.use(bodyParser.urlencoded({ extended: true }));
                 this.application.use(fileupload());
                 this.loadRoutes();
+                this.loadAssets();
                 this.application.get("/", (req, res) => {
                     res.send("Endpoint inválido");
                 });

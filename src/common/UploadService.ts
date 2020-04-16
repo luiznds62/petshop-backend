@@ -5,18 +5,19 @@ import { TipoUpload } from "./TipoUpload";
 
 export class UploadService {
 
-    getFile(fileName, res) {
+    getFile(fileName) {
         if (!fileName) {
             throw new TypeError("Nome do arquivo não informado");
         }
 
         fs.exists(`${__dirname}/../uploads/${fileName}`, (exists) => {
             if (exists) {
-                return fs.createReadStream(`${__dirname}/../uploads/${fileName}`).pipe(res);
+                return `${__dirname}/../uploads/${fileName}`
             } else {
                 throw new TypeError("Arquivo não existente");
             }
         })
+        return ""
     }
 
     saveFile(req: express.Request, tipoUpload: TipoUpload) {

@@ -12,14 +12,22 @@ let router = express.Router();
 router.use(authMiddleware);
 
 router.get("/:id/logo", async (req, res) => {
-  let nomeLogo = await empresaService.buscarCaminhoLogo(req.params.id);
+  try {
+    let nomeLogo = await empresaService.buscarCaminhoLogo(req.params.id);
 
-  if (nomeLogo.err) {
+    try {
+      res.sendFile(path.join(__dirname, `../uploads/` + nomeLogo));
+    } catch (error) {
+      if (error.message == "Logo não encontrada") {
+        res.sendFile(
+          path.join(__dirname, `../src/assets/logonotfound.png`)
+        );
+      }
+    }
+  } catch (error) {
     res.sendFile(
-      path.join(__dirname, `../src/uploads/images/empresa/notfound.jpg`)
+      path.join(__dirname, `../assets/logonotfound.png`)
     );
-  } else {
-    uploadService.getFile(nomeLogo, res);
   }
 });
 
@@ -33,7 +41,7 @@ router.post(
 
       res.send(new ResponseBuilder(true, "Upload realizado com sucesso"));
     } catch (error) {
-      res.send(new ResponseBuilder(false, "Ocorreu um erro"));
+      res.send(new ResponseBuilder(false, "Ocorreu um erro: " + error));
     }
   }
 );

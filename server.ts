@@ -4,7 +4,9 @@ import * as bodyParser from "body-parser";
 import * as cors from "cors";
 import * as helmet from "helmet";
 import * as hpp from "hpp";
+import * as path from "path";
 import * as fs from "fs";
+import * as shelljs from "shelljs";
 import * as fileupload from "express-fileupload";
 
 // Configurações
@@ -13,6 +15,12 @@ import { environments } from "./config/environments";
 
 export class Server {
   application: any;
+
+  loadAssets() {
+    let folder = path.basename(__dirname).substr(0, __dirname.length - 4).concat('src/assets/.');
+    folder = "./".concat(folder.substr(4, folder.length));
+    shelljs.cp('-R', folder, './dist/src/assets');
+  }
 
   loadDb() {
     return new Promise((resolve, reject) => {
@@ -55,6 +63,7 @@ export class Server {
         this.application.use(bodyParser.urlencoded({ extended: true }));
         this.application.use(fileupload())
         this.loadRoutes();
+        this.loadAssets();
 
         this.application.get("/", (req, res) => {
           res.send("Endpoint inválido");

@@ -20,12 +20,19 @@ let empresaService = new EmpresaService_1.EmpresaService();
 let router = express.Router();
 router.use(AuthMiddleware_1.default);
 router.get("/:id/logo", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    let nomeLogo = yield empresaService.buscarCaminhoLogo(req.params.id);
-    if (nomeLogo.err) {
-        res.sendFile(path.join(__dirname, `../src/uploads/images/empresa/notfound.jpg`));
+    try {
+        let nomeLogo = yield empresaService.buscarCaminhoLogo(req.params.id);
+        try {
+            res.sendFile(path.join(__dirname, `../uploads/` + nomeLogo));
+        }
+        catch (error) {
+            if (error.message == "Logo não encontrada") {
+                res.sendFile(path.join(__dirname, `../src/assets/logonotfound.png`));
+            }
+        }
     }
-    else {
-        uploadService.getFile(nomeLogo, res);
+    catch (error) {
+        res.sendFile(path.join(__dirname, `../assets/logonotfound.png`));
     }
 }));
 router.post("/upload/logo", (req, res) => {
@@ -35,7 +42,7 @@ router.post("/upload/logo", (req, res) => {
         res.send(new ResponseBuilder_1.ResponseBuilder(true, "Upload realizado com sucesso"));
     }
     catch (error) {
-        res.send(new ResponseBuilder_1.ResponseBuilder(false, "Ocorreu um erro"));
+        res.send(new ResponseBuilder_1.ResponseBuilder(false, "Ocorreu um erro: " + error));
     }
 });
 router.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
