@@ -1,6 +1,7 @@
 import { Endereco } from '../models/Endereco'
 import { Cidade } from '../models/Cidade'
 import { Bairro } from '../models/Bairro'
+import { Estado } from '../models/Estado'
 
 export class EnderecoService {
     async validar(_endereco) {
@@ -78,7 +79,13 @@ export class EnderecoService {
     async buscarTodos(offset = 0, limit = 25, order = "ASC") {
         try {
             let enderecos = await Endereco.findAll(
-                { include: [{ all: true }], limit: limit, offset: offset, order: [['id', order]] }
+                {
+                    include: [
+                        { model: Bairro },
+                        {
+                            model: Cidade, include: [{ model: Estado }]
+                        }], limit: limit, offset: offset, order: [['id', order]]
+                }
             )
 
             if (enderecos.length === 0) {
