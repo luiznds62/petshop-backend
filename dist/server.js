@@ -1,4 +1,13 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 // Dependências
 const express = require("express");
@@ -22,12 +31,12 @@ class Server {
     loadDb() {
         return new Promise((resolve, reject) => {
             db_1.default.authenticate()
-                .then(() => {
+                .then(() => __awaiter(this, void 0, void 0, function* () {
                 // Cria ou atualiza dados do Banco
-                db_1.default.sync();
+                yield db_1.default.sync();
                 console.log("DB Conectado");
                 resolve();
-            })
+            }))
                 .catch(err => {
                 console.log("Erro ao conectar no banco: " + err);
                 reject();
@@ -56,6 +65,7 @@ class Server {
                 this.application.use(fileupload());
                 this.loadRoutes();
                 this.loadAssets();
+                this.loadDb();
                 this.application.get("/", (req, res) => {
                     res.send("Endpoint inválido");
                 });
@@ -69,7 +79,7 @@ class Server {
         });
     }
     bootstrap() {
-        return this.loadDb().then(() => this.initRoutes().then(() => this));
+        return this.initRoutes().then(() => this);
     }
 }
 exports.Server = Server;

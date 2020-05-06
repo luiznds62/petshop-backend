@@ -25,9 +25,9 @@ export class Server {
   loadDb() {
     return new Promise((resolve, reject) => {
       db.authenticate()
-        .then(() => {
+        .then(async () => {
           // Cria ou atualiza dados do Banco
-          db.sync();
+          await db.sync();
 
           console.log("DB Conectado");
           resolve();
@@ -64,6 +64,7 @@ export class Server {
         this.application.use(fileupload())
         this.loadRoutes();
         this.loadAssets();
+        this.loadDb();
 
         this.application.get("/", (req, res) => {
           res.send("Endpoint inválido");
@@ -82,6 +83,6 @@ export class Server {
   }
 
   bootstrap(): Promise<Server> {
-    return this.loadDb().then(() => this.initRoutes().then(() => this));
+    return this.initRoutes().then(() => this);
   }
 }

@@ -1,7 +1,7 @@
 import { Sequelize } from "sequelize";
 import { environments } from "../config/environments";
 
-export default new Sequelize(
+let db = new Sequelize(
   environments.database.name,
   environments.database.username,
   environments.database.password,
@@ -15,3 +15,5 @@ export default new Sequelize(
     logging: false
   }
 );
+
+export default db
