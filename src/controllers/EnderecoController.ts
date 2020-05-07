@@ -12,7 +12,8 @@ router.get("/", async (req, res) => {
     let enderecos = await enderecoService.buscarTodos(
       req.query.offset,
       req.query.limit,
-      req.query.order
+      req.query.order,
+      req.query.query
     );
     res.send(
       new ResponseBuilder(

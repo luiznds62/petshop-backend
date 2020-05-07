@@ -2,6 +2,7 @@ import { Endereco } from '../models/Endereco'
 import { Cidade } from '../models/Cidade'
 import { Bairro } from '../models/Bairro'
 import { Estado } from '../models/Estado'
+import { Op } from 'sequelize'
 
 export class EnderecoService {
     async validar(_endereco) {
@@ -76,15 +77,30 @@ export class EnderecoService {
         }
     }
 
-    async buscarTodos(offset = 0, limit = 25, order = "ASC") {
+    async buscarTodos(offset = 0, limit = 25, order = "ASC", query = "") {
         try {
             let enderecos = await Endereco.findAll(
                 {
                     include: [
-                        { model: Bairro },
+                        {
+                            model: Bairro
+                        },
                         {
                             model: Cidade, include: [{ model: Estado }]
-                        }], limit: limit, offset: offset, order: [['id', order]]
+                        }],
+                    limit: limit,
+                    offset: offset,
+                    order: [
+                        ['id', order]
+                    ],
+                    where: query ? {
+                        [Op.or]: [
+                            { rua: { [Op.iLike]: `%${query}%` } },
+                            { cep: { [Op.eq]: query } },
+                            { complemento: { [Op.iLike]: `%${query}%` } },
+                            { numero: { [Op.eq]: query } }
+                        ]
+                    } : undefined
                 }
             )
 
