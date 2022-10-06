@@ -43,7 +43,7 @@
     "@types/express": "^4.17.2",
     "@types/node": "^13.7.1",
     "nodemon": "^1.19.4",
-    "snyk": "^1.295.0"
+    "snyk": "^1.996.0"
   },
   "license": "MIT"
 }
